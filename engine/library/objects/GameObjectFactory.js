@@ -1,19 +1,13 @@
-import Vector from 'engine/library/vector';
-
-let instance = null;
+import { Vector } from 'engine/library/maths';
 
 /**
- * Singleton to hold all instantiated GameObjects
+ * Singleton to hold all references to all instantiated GameObjects
  */
-export class GameObjectFactory {
+class GameObjectFactory {
     constructor() {
-        if(instance != null) {
-            return instance;
-        }
-        instance = this;
-
         // map of all GameObjects in the game
         this._gameObjects = new Map();
+        this._colliders = new Map();
     }
 
     get hierarchy() {
@@ -56,3 +50,5 @@ export class GameObjectFactory {
         return this._gameObjects.get(id);
     }
 }
+
+export default new GameObjectFactory();

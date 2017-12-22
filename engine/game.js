@@ -1,7 +1,6 @@
 'use strict';
 
 import { bootGameLoop } from 'engine/library/gameLoop';
-import Canvas from 'engine/library/canvas';
 
 /**
  * Base container for a game. A game should extend this
@@ -14,7 +13,11 @@ export class Game {
      */
     initialise() {
         bootGameLoop(this.onStart);
-        const canvas = new Canvas();
     }
+
+    /**
+     * Logic to run once after the main game loop is started
+     */
+    onStart() {}
 
 }

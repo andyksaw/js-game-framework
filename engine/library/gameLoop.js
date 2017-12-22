@@ -1,6 +1,4 @@
-import { GameObjectFactory } from 'engine/library/gameObjectFactory';
-
-const objFactory = new GameObjectFactory();
+import { GameObjectFactory } from 'engine/library/objects';
 
 /**
  * Desired amount of time in milliseconds between frames
@@ -47,14 +45,18 @@ function gameLoop() {
  *  Delegates work to every game object
  */
 function onUpdate(timestep) {
-    objFactory.hierarchy.forEach(obj => obj.onUpdate(timestep));
+    GameObjectFactory
+        .hierarchy
+        .forEach(obj => obj.onUpdate(timestep));
 }
 
 /**
  * Renders every visible GameObject to DOM every frame
  */
 function onRender() {
-    objFactory.hierarchy.forEach(obj => obj.render());
+    GameObjectFactory
+        .hierarchy
+        .forEach(obj => obj.render());
 }
 
 /**

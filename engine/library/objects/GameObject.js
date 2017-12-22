@@ -1,14 +1,17 @@
-import Vector from 'engine/library/vector';
-import BoundingBox from 'engine/library/boundingBox';
+import { Vector } from 'engine/library/maths';
+import { BoundingBox } from 'engine/library/objects';
 
 /**
  * Represents an object in the scene
- * 
- * @param {string} id           Unique identifier
- * @param {Vector} dimensions   Size of the object in 2d space
- * @param {Vector} position     Starting position of the object
  */
 export class GameObject {
+    /**
+     * Creates a new GameObject
+     * 
+     * @param {string} id           Unique identifier
+     * @param {Vector} dimensions   Size of the object in 2d space
+     * @param {Vector} position     Starting position of the object
+     */
     constructor(id, dimensions, position = null) {
         this._id = id;
         this._dimensions = dimensions;
@@ -84,6 +87,11 @@ export class GameObject {
      * Logic to run when the object is destroyed
      */
     onDestroy() {}
+
+    /**
+     * Logic to run every game loop frame
+     */
+    onUpdate() {}
 
     /**
      * Sets the visibility of the object. Setting to false

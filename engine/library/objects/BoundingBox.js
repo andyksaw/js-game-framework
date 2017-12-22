@@ -1,4 +1,4 @@
-import Vector from 'engine/library/vector';
+import { Vector } from 'engine/library/maths';
 
 /**
  * Represents the four corners of a GameObject, used for calculating

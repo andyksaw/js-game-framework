@@ -2,28 +2,28 @@ import { Game } from 'engine/game';
 import { Block } from 'games/brick/components/block';
 import { Bat } from 'games/brick/components/bat';
 import { Ball } from 'games/brick/components/ball';
-import { GameObjectFactory } from 'engine/library/gameObjectFactory';
-import Vector from 'engine/library/vector';
-import Viewport from 'engine/library/viewport';
-import Canvas from 'engine/library/canvas';
+
+import { GameObjectFactory } from 'engine/library/objects';
+import { Vector } from 'engine/library/maths';
+import { Viewport, Canvas } from 'engine/library/screen';
+import { BoxCollider } from 'engine/library/collisions';
 
 class BrickGame extends Game {
     onStart() {
-        const factory = new GameObjectFactory();
-        const bat = factory.instantiate(Bat, {
+        const bat = GameObjectFactory.instantiate(Bat, {
             id: 'bat',
             dimensions: new Vector(180, 20),
             position: new Vector(50, 50),
+            collider: BoxCollider,
         });
 
-        const ball = factory.instantiate(Ball, {
+        const ball = GameObjectFactory.instantiate(Ball, {
             id: 'ball',
             dimensions: new Vector(25, 25),
             position: Viewport.origin,
         });
 
-        const c = new Canvas();
-        // c.drawLine(new Vector(100, 350), new Vector(200, 350));
+        // Canvas.drawLine(new Vector(100, 350), new Vector(200, 350));
         
         // c.drawLine(new Vector(100, 350), new Vector(500, 250));
         // c.drawLine(new Vector(100, 350), new Vector(300, 450));

@@ -2,10 +2,13 @@ var path = require('path');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
-    entry: 'games/brick/brick.js',
+    entry: {
+        brick:  'games/brick/brick.js',
+        flappy: 'games/flappy/flappy.js',
+    },
     output: {
         path: path.resolve(__dirname, 'builds'),
-        filename: 'brick.js',
+        filename: '[name].js',
     },
     resolve: {
         alias: {

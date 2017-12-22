@@ -1,8 +1,8 @@
-import { GameObject } from 'engine/library/gameObject';
-import Vector from 'engine/library/vector';
-import Keyboard from 'engine/library/keyboard';
-import { random } from 'engine/utility/utility.js';
-import Viewport from 'engine/library/viewport';
+import { GameObject } from 'engine/library/objects';
+import { Vector } from 'engine/library/maths';
+import { Keyboard } from 'engine/library/input';
+import { random } from 'engine/utility/utility';
+import { Viewport } from 'engine/library/screen';
 
 export class Ball extends GameObject {
     getElementDom() {

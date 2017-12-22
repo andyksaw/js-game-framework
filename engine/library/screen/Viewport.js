@@ -1,26 +1,28 @@
-import Vector from 'engine/library/vector';
+import { Vector } from 'engine/library/maths';
 
 /**
  * Represents the browser window
  */
-export default class Viewport {
+class Viewport {
     constructor() {
         this._viewportHeight;
         this._viewportWidth;
     }
 
-    static get width() {
+    get width() {
         return window.innerWidth;
     }
 
-    static get height() {
+    get height() {
         return window.innerHeight;
     }
 
-    static get origin() {
+    get origin() {
         return new Vector(
             this.width / 2,
             this.height / 2,
         );
     }
 }
+
+export default new Viewport();

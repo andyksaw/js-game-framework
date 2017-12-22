@@ -1,7 +1,7 @@
-import { GameObject } from 'engine/library/gameObject';
-import Vector from 'engine/library/vector';
-import Keyboard from 'engine/library/keyboard';
-import Viewport from 'engine/library/viewport';
+import { GameObject } from 'engine/library/objects';
+import { Vector } from 'engine/library/maths';
+import { Keyboard } from 'engine/library/input';
+import { Viewport } from 'engine/library/screen';
 
 export class Bat extends GameObject {
     _boxDirection = 1;
@@ -14,10 +14,9 @@ export class Bat extends GameObject {
     }
 
     onUpdate(timestep) {
-        const keyboard = new Keyboard();
-
-        const leftPress = keyboard.getKeyDown('a');
-        const rightPress = keyboard.getKeyDown('d');
+        // input handlers
+        const leftPress  = Keyboard.getKeyDown('a');
+        const rightPress = Keyboard.getKeyDown('d');
 
         let speed = 10;
         let velocity = new Vector(0, 0);
@@ -32,6 +31,7 @@ export class Bat extends GameObject {
 
         this.position = this.position.add(velocity);
 
+        // don't let the bat escape the screen
         if(this.bounds.left < 0) {
             this.position.x = this.dimensions.x / 2;
         }
