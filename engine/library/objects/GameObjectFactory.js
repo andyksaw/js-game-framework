@@ -40,10 +40,10 @@ class GameObjectFactory {
         } = config;
 
         if(id == null) {
-            throw Error(`Instantiation failed: no unique id given for ${type(gameObject)}`);
+            throw new Error(`Instantiation failed: no unique id given for ${type(gameObject)}`);
         }
         if(this._gameObjects.get(id)) {
-            throw Error(`Instantiation failed: a GameObject already exists with the name ${id}`)
+            throw new Error(`Instantiation failed: a GameObject already exists with the name ${id}`)
         }
 
         const obj = new GameObject(id, position);

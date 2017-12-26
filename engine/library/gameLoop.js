@@ -61,9 +61,7 @@ function onUpdate(timestep) {
             corpseObjects.push(obj);
             continue;
         }
-        if(!obj.isDisabled) {
-            obj.onUpdate(timestep);
-        }
+        obj.onUpdate(timestep);
     }
 
     // cleanup any objects marked for deletion
@@ -78,11 +76,7 @@ function onUpdate(timestep) {
 function onRender() {
     GameObjectFactory
         .hierarchy
-        .forEach(obj => {
-            if(!obj.isDisabled) {
-                obj.render()
-            }
-        });
+        .forEach(obj => obj.render());
 }
 
 /**

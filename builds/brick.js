@@ -155,6 +155,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+Object.defineProperty(exports, "Camera", {
+  enumerable: true,
+  get: function get() {
+    return _Camera.default;
+  }
+});
 Object.defineProperty(exports, "Canvas", {
   enumerable: true,
   get: function get() {
@@ -167,6 +173,8 @@ Object.defineProperty(exports, "Viewport", {
     return _Viewport.default;
   }
 });
+
+var _Camera = _interopRequireDefault(__webpack_require__(27));
 
 var _Canvas = _interopRequireDefault(__webpack_require__(11));
 
@@ -209,6 +217,10 @@ exports.Game = void 0;
 
 var _GameLoop = __webpack_require__(22);
 
+var _screen = __webpack_require__(2);
+
+var _maths = __webpack_require__(0);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -233,6 +245,7 @@ function () {
      * Starts the engine game loop and the game's logic
      */
     value: function initialise() {
+      _screen.Camera.transform.position = new _maths.Vector(0, 0);
       (0, _GameLoop.bootGameLoop)(this.onStart);
     }
     /**
@@ -316,11 +329,11 @@ function () {
           sprite = _config$sprite === void 0 ? {} : _config$sprite;
 
       if (id == null) {
-        throw Error("Instantiation failed: no unique id given for ".concat(type(gameObject)));
+        throw new Error("Instantiation failed: no unique id given for ".concat(type(gameObject)));
       }
 
       if (this._gameObjects.get(id)) {
-        throw Error("Instantiation failed: a GameObject already exists with the name ".concat(id));
+        throw new Error("Instantiation failed: a GameObject already exists with the name ".concat(id));
       }
 
       var obj = new _objects.GameObject(id, position);
@@ -512,6 +525,8 @@ var _maths = __webpack_require__(0);
 
 var _objects = __webpack_require__(1);
 
+var _screen = __webpack_require__(2);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -654,6 +669,10 @@ function () {
   }, {
     key: "onUpdate",
     value: function onUpdate(timestep) {
+      if (this.isDisabled || this.isDestroying) {
+        return;
+      }
+
       this._components.forEach(function (c) {
         return c.onUpdate(timestep);
       });
@@ -665,19 +684,20 @@ function () {
   }, {
     key: "render",
     value: function render() {
-      if (!this._isVisible) {
+      if (!this._isVisible || this._isDisabled || this.isDestroying) {
         return;
       }
 
-      var position = this.transform.position; // the Transform is the world-space representation of
-      // the GameObject, so sync the GameObject's div to its
-      // Transform position
+      var position = this.transform.position; // the Transform stores our world-space coordinates,
+      // but we need to render the object in screen-space
 
-      this._element.style.left = position.x;
-      this._element.style.top = position.y;
+      var cameraPos = _screen.Camera.transform.position;
+      var screenSpacePos = new _maths.Vector(position.x - cameraPos.x, position.y - cameraPos.y);
+      this._element.style.left = screenSpacePos.x;
+      this._element.style.top = screenSpacePos.y;
 
       if (this._sprite) {
-        this._sprite.render(position);
+        this._sprite.render(screenSpacePos);
       }
     }
   }, {
@@ -1081,6 +1101,11 @@ function () {
     key: "height",
     get: function get() {
       return window.innerHeight;
+    }
+  }, {
+    key: "screen",
+    get: function get() {
+      return new _maths.Vector(this.width, this.height);
     }
   }, {
     key: "origin",
@@ -1518,9 +1543,7 @@ function onUpdate(timestep) {
       continue;
     }
 
-    if (!obj.isDisabled) {
-      obj.onUpdate(timestep);
-    }
+    obj.onUpdate(timestep);
   } // cleanup any objects marked for deletion
 
 
@@ -1535,9 +1558,7 @@ function onUpdate(timestep) {
 
 function onRender() {
   _objects.GameObjectFactory.hierarchy.forEach(function (obj) {
-    if (!obj.isDisabled) {
-      obj.render();
-    }
+    return obj.render();
   });
 }
 /**
@@ -1750,7 +1771,7 @@ function () {
 
     _classCallCheck(this, Transform);
 
-    this._position = position || new _maths.Vector();
+    this._position = position || _maths.Vector.origin();
   }
 
   _createClass(Transform, [{
@@ -1764,14 +1785,7 @@ function () {
       return this._position;
     },
     set: function set(value) {
-      var difference = value.subtract(this._position);
-      this._position = value; // update bounding box position
-      // this._boundingBox.updatePosition(vector);
-      // move any children along with this object
-      // this._children.forEach(child => {
-      //     console.log(child);
-      //     child.position = child.position.add(difference);
-      // });
+      this._position = value;
     }
   }]);
 
@@ -1779,6 +1793,52 @@ function () {
 }();
 
 exports.default = Transform;
+
+/***/ }),
+/* 26 */,
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _objects = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Camera =
+/*#__PURE__*/
+function () {
+  function Camera() {
+    _classCallCheck(this, Camera);
+  }
+
+  _createClass(Camera, [{
+    key: "transform",
+    get: function get() {
+      if (!this._transform) {
+        this._transform = new _objects.Transform();
+      }
+
+      return this._transform;
+    }
+  }]);
+
+  return Camera;
+}();
+
+var _default = new Camera();
+
+exports.default = _default;
 
 /***/ })
 /******/ ]);

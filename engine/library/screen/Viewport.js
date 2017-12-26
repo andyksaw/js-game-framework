@@ -17,6 +17,10 @@ class Viewport {
         return window.innerHeight;
     }
 
+    get screen() {
+        return new Vector(this.width, this.height);
+    }
+
     get origin() {
         return new Vector(
             this.width / 2,

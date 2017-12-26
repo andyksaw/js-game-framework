@@ -1,5 +1,6 @@
 import { Vector } from 'engine/library/maths';
 import { BoundingBox, Transform, Sprite } from 'engine/library/objects';
+import { Camera } from 'engine/library/screen';
 
 /**
  * Represents an object in the scene
@@ -142,6 +143,9 @@ export default class GameObject {
      * Calls onUpdate() on all components on this GameObject
      */
     onUpdate(timestep) {
+        if(this.isDisabled || this.isDestroying) {
+            return;
+        }
         this._components.forEach(c => c.onUpdate(timestep));
     }
 
@@ -149,20 +153,25 @@ export default class GameObject {
      * Renders the object in world space each game loop frame
      */
     render() {
-        if(!this._isVisible) {
+        if(!this._isVisible || this._isDisabled || this.isDestroying) {
             return;
         }
 
         const position = this.transform.position;
 
-        // the Transform is the world-space representation of
-        // the GameObject, so sync the GameObject's div to its
-        // Transform position
-        this._element.style.left = position.x;
-        this._element.style.top  = position.y;
+        // the Transform stores our world-space coordinates,
+        // but we need to render the object in screen-space
+        const cameraPos = Camera.transform.position;
+        const screenSpacePos = new Vector(
+            position.x - cameraPos.x,
+            position.y - cameraPos.y
+        );
+
+        this._element.style.left = screenSpacePos.x;
+        this._element.style.top  = screenSpacePos.y;
 
         if(this._sprite) {
-            this._sprite.render(position);
+            this._sprite.render(screenSpacePos);
         }
     }
 }
