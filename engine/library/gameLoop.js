@@ -16,6 +16,8 @@ const TIME_STEP = 1;
 
 /**
  *  Timestamp of the last rendered frame
+ * 
+ * @type {number}
  */
 let lastTick;
 
@@ -45,9 +47,29 @@ function gameLoop() {
  *  Delegates work to every game object
  */
 function onUpdate(timestep) {
-    GameObjectFactory
-        .hierarchy
-        .forEach(obj => obj.onUpdate(timestep));
+    const hierarchy = GameObjectFactory.hierarchy;
+    const corpseObjects = [];
+
+    // loop over a buffer so that newly instantiated objects
+    // always start execution from the next frame
+    const bufferCount = hierarchy.length;
+    for(let i = 0; i < bufferCount; i++) {
+        const obj = hierarchy[i];
+
+        // any objects marked for deletion should not be executed
+        if(obj.isDestroying) {
+            corpseObjects.push(obj);
+            continue;
+        }
+        if(!obj.isDisabled) {
+            obj.onUpdate(timestep);
+        }
+    }
+
+    // cleanup any objects marked for deletion
+    if(corpseObjects.length > 0) {
+        GameObjectFactory.removeBatch(corpseObjects);
+    }
 }
 
 /**
@@ -56,7 +78,11 @@ function onUpdate(timestep) {
 function onRender() {
     GameObjectFactory
         .hierarchy
-        .forEach(obj => obj.render());
+        .forEach(obj => {
+            if(!obj.isDisabled) {
+                obj.render()
+            }
+        });
 }
 
 /**

@@ -16,51 +16,51 @@ export class Plane extends GameObject {
     }
 
     onUpdate(timestep) {
-        const gravity = new Vector(0, 1);
-        this._velocity = this._velocity.add(gravity);
+        // const gravity = new Vector(0, 1);
+        // this._velocity = this._velocity.add(gravity);
 
-        if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
-            this._velocity = new Vector(this._velocity.x, -15);
-        }
-        if(Keyboard.getKeyDown(Keyboard.D)) {
-            this._velocity = this._velocity.add(new Vector(1, 0));
-        }
-        if(Keyboard.getKeyDown(Keyboard.A)) {
-            this._velocity = this._velocity.add(new Vector(-1, 0));
-        }
+        // if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
+        //     this._velocity = new Vector(this._velocity.x, -15);
+        // }
+        // if(Keyboard.getKeyDown(Keyboard.D)) {
+        //     this._velocity = this._velocity.add(new Vector(1, 0));
+        // }
+        // if(Keyboard.getKeyDown(Keyboard.A)) {
+        //     this._velocity = this._velocity.add(new Vector(-1, 0));
+        // }
 
-        // clamp max speeds
-        if(this._velocity.y >= 15) {
-            this._velocity.y = 15;
-        }
-        if(this._velocity.x >= 10) {
-            this._velocity.x = 10;
-        }
-        if(this._velocity.x < -10) {
-            this._velocity.x = -10;
-        }
+        // // clamp max speeds
+        // if(this._velocity.y >= 15) {
+        //     this._velocity.y = 15;
+        // }
+        // if(this._velocity.x >= 10) {
+        //     this._velocity.x = 10;
+        // }
+        // if(this._velocity.x < -10) {
+        //     this._velocity.x = -10;
+        // }
 
 
-        this._velocity = new Vector(
-            this._velocity.x * timestep,
-            this._velocity.y * timestep
-        );
+        // this._velocity = new Vector(
+        //     this._velocity.x * timestep,
+        //     this._velocity.y * timestep
+        // );
 
-        this.position = this.position.add(this._velocity);
+        // this.position = this.position.add(this._velocity);
 
-        // clamp horizontal axis to screen
-        if(this.bounds.left <= 0) {
-            this.position.x = this.dimensions.x / 2;
-            this._velocity.x = 0;
-        }
-        if(this.bounds.right >= Viewport.width) {
-            this.position.x = Viewport.width - (this.dimensions.x / 2);
-            this._velocity.x = 0;
-        }
-        if(this.bounds.top <= 0) {
-            this.position.y = this.dimensions.y / 2;
-            this._velocity.y = 0;
-        }
+        // // clamp horizontal axis to screen
+        // if(this.bounds.left <= 0) {
+        //     this.position.x = this.dimensions.x / 2;
+        //     this._velocity.x = 0;
+        // }
+        // if(this.bounds.right >= Viewport.width) {
+        //     this.position.x = Viewport.width - (this.dimensions.x / 2);
+        //     this._velocity.x = 0;
+        // }
+        // if(this.bounds.top <= 0) {
+        //     this.position.y = this.dimensions.y / 2;
+        //     this._velocity.y = 0;
+        // }
 
         // if(this.bounds.right >= Viewport.width || this.bounds.left <= 0) {
         //     this._velocity.x = -this._velocity.x;

@@ -1,44 +1,20 @@
 import { Vector } from 'engine/library/maths';
+import { GameObject } from 'engine/library/objects';
 
 /**
  * Singleton to hold all references to all instantiated GameObjects
  */
 class GameObjectFactory {
     constructor() {
-        // map of all GameObjects in the game
+        // an ordered list (array) of all GameObjects
+        this._hierarchy = [];
+
+        // a unique id to GameObject mapping
         this._gameObjects = new Map();
-        this._colliders = new Map();
     }
 
     get hierarchy() {
-        return this._gameObjects;
-    }
-
-    /**
-    * Creates a new GameObject
-    * 
-    * @type {string} id                 Name/identifier of the object
-    * @type {GameObject} gameObject     GameObject to create
-    * @type {Vector} dimensions         Size of the GameObject
-    * @type {Vector} position           Starting position of the object
-    */
-    instantiate(gameObject, config) {
-        const { 
-            id, 
-            dimensions = new Vector(0, 0),
-            position = new Vector(0, 0),
-        } = config;
-
-        if(id == null) {
-            throw Error('Cannot instantiate a GameObject without a unique id');
-        }
-
-        const obj = new gameObject(id, dimensions, position);
-        this._gameObjects.set(id, obj);
-
-        obj.insertDom();
-
-        return obj;
+        return this._hierarchy;
     }
 
     /**
@@ -48,6 +24,54 @@ class GameObjectFactory {
      */
     get(id) {
         return this._gameObjects.get(id);
+    }
+
+    /**
+    * Creates a new GameObject
+    * 
+    * @type {string} id         Name/identifier of the object
+    * @type {object} config     GameObject settings
+    */
+    instantiate(id, config) {
+        const { 
+            position = new Vector(0, 0),
+            components = [],
+            sprite = {},
+        } = config;
+
+        if(id == null) {
+            throw Error(`Instantiation failed: no unique id given for ${type(gameObject)}`);
+        }
+        if(this._gameObjects.get(id)) {
+            throw Error(`Instantiation failed: a GameObject already exists with the name ${id}`)
+        }
+
+        const obj = new GameObject(id, position);
+        this._hierarchy.push(obj);
+        this._gameObjects.set(id, obj);
+
+        if(sprite.asset) {
+            obj.setSprite(sprite);
+        }
+
+        components.forEach(c => obj.addComponent(c));
+
+        obj.createDom(id);
+
+        return obj;
+    }
+
+    /**
+     * Takes in an array of GameObjects and removes them all 
+     * from the hierarchy immediately
+     * 
+     * @param {array} gameObjects 
+     */
+    removeBatch(gameObjects) {
+        gameObjects.forEach(obj => {
+            this._gameObjects.delete(obj.id);
+        });
+        this._hierarchy = this._hierarchy.filter(obj => gameObjects.indexOf(obj) < 0);
     }
 }
 

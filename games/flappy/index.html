@@ -9,14 +9,21 @@
             }
 
             .gameObject {
-                background: #e6e6e6;
+                background: red;
                 position: absolute;
+                width: 1px;
+                height: 1px;
             }
 
-            #plane {
-                background: url('assets/images/planeRed1.png');
+            .sprite {
+                position: absolute;
                 background-size: contain;
                 background-repeat: no-repeat;
+                background-position: center center;
+            }
+
+            .bounds {
+                border: 1px solid green;
             }
             
             canvas {

@@ -1,6 +1,6 @@
 'use strict';
 
-import { bootGameLoop } from 'engine/library/gameLoop';
+import { bootGameLoop } from 'engine/library/GameLoop';
 
 /**
  * Base container for a game. A game should extend this

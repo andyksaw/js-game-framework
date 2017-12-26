@@ -1,46 +1,39 @@
 import { Vector } from 'engine/library/maths';
-import { BoundingBox } from 'engine/library/objects';
+import { BoundingBox, Transform, Sprite } from 'engine/library/objects';
 
 /**
  * Represents an object in the scene
  */
-export class GameObject {
+export default class GameObject {
     /**
      * Creates a new GameObject
      * 
      * @param {string} id           Unique identifier
-     * @param {Vector} dimensions   Size of the object in 2d space
      * @param {Vector} position     Starting position of the object
      */
-    constructor(id, dimensions, position = null) {
+    constructor(id, position = null) {
         this._id = id;
-        this._dimensions = dimensions;
-        this._position = position || new Vector(0, 0);
         this._isVisible = true;
+        this._isDestroying = false;
+        this._isDisabled = false;
+        
+        this._components = [];
+        this._transform = new Transform(position);
+        this._sprite = null;
+        
+        // this._boundingBox = new BoundingBox(position, dimensions);
 
         // child GameObjects of this GameObject
-        this._children = [];
-
-        this._boundingBox = new BoundingBox(position, dimensions);
+        // this._children = [];
     }
 
-    get position() {
-        return this._position;
+    get transform() {
+        return this._transform;
     }
-    set position(vector) {
-        const difference = vector.subtract(this._position);
-        this._position = vector;
-        
-        // update bounding box position
-        this._boundingBox.updatePosition(vector);
-        
-        // move any children along with this object
-        this._children.forEach(child => {
-            console.log(child);
-            child.position = child.position.add(difference);
-        });
+    get sprite() {
+        return this._sprite;
     }
-    get visible() {
+    get isVisible() {
         return this._isVisible;
     }
     get name() {
@@ -49,49 +42,52 @@ export class GameObject {
     get element() {
         return this._element;
     }
-    get bounds() {
-        return this._boundingBox;
+    // get bounds() {
+    //     return this._boundingBox;
+    // }
+    get isDestroying() {
+        return this._isDestroying;
     }
-    get dimensions() {
-        return this._dimensions;
-    }
-
-    addChild(gameObject) {
-        this._children.push(gameObject);
-        console.log(this);
+    get isDisabled() {
+        return this._isDisabled;
     }
 
-    insertDom() {
-        const element = this.getElementDom();
-        if(element) {
-            element.classList.add('gameObject');
-            this._element = element;
-            document.body.appendChild(element);
-        }
+    // set pivot(value) {
+
+    // }
+
+    createDom(id) {
+        const element = document.createElement('div');
+        element.id = id;
+        element.classList.add('gameObject');
+
+        document.body.appendChild(element);
+        this._element = element;
 
         this.onInstantiate();
     }
 
-    /**
-     * If a DOM element is returned from this method, the element
-     * is stored in the GameObject and used as its sprite.
-     */
-    getElementDom() {}
+    _addComponent(component) {
+        this._components.push(component);
+    }
 
-    /**
-     * Logic to run when the object is first instantiated.
-     */
-    onInstantiate() {}
+    setSprite(config = {}) {
+        this._sprite = new Sprite(this.transform.position, config);
+        this._sprite.appendDom();
+    }
 
-    /**
-     * Logic to run when the object is destroyed
-     */
-    onDestroy() {}
+    _setCollider(collider) {
+        this._collider = collider;
+    }
 
-    /**
-     * Logic to run every game loop frame
-     */
-    onUpdate() {}
+    _setBoundingBox(dimensions) {
+        // this._boundingBox = new BoundingBox(this.transform.position, dimensions);
+    }
+        
+    // addChild(gameObject) {
+    //     this._children.push(gameObject);
+    //     console.log(this);
+    // }
 
     /**
      * Sets the visibility of the object. Setting to false
@@ -102,8 +98,51 @@ export class GameObject {
     setVisibility(isVisible) {
         if(this._isVisible != isVisible) {
             this._element.style.display = isVisible ? 'none' : 'hidden';
+            this._isVisible = isVisible;
         }
-        this._isVisible = isVisible;
+    }
+
+    /**
+     * Sets whether the object is disabled.
+     * 
+     * In a disabled state, the object neither renders nor
+     * executes its update loop.
+     * 
+     * @param {boolean} isDisabled 
+     */
+    setDisabled(isDisabled) {
+        this._isDisabled = isDisabled;
+    }
+
+    /**
+     * Marks the object for destruction at the end of the frame.
+     * Furthermore, the object will not execute its update loop if 
+     * it hasn't already executed it yet.
+     */
+    destroy() {
+        this._isDestroying = true;
+        this.onDestroy();
+    }
+
+    /**
+     * Calls onInstantiate() on all components on this GameObject
+     */
+    onInstantiate() {
+        this._components.forEach(c => c.onInstantiate());
+    }
+
+    /**
+     * Calls onDestroy() on all components on this GameObject
+     */
+    onDestroy() {
+        this._components.forEach(c => c.onDestroy());
+    }
+
+    /**
+     * Calls onUpdate() on all components on this GameObject
+     */
+    onUpdate(timestep) {
+        this._components.forEach(c => c.onUpdate(timestep));
     }
 
     /**
@@ -114,12 +153,16 @@ export class GameObject {
             return;
         }
 
-        // since we're using the Vector position as the centre pivot,
-        // we need to add half of the size to all sides
-        this._element.style.left   = this._position.x - (this._dimensions.x / 2);
-        this._element.style.top    = this._position.y - (this._dimensions.y / 2);
+        const position = this.transform.position;
 
-        this._element.style.width = this._dimensions.x;
-        this._element.style.height = this._dimensions.y;
+        // the Transform is the world-space representation of
+        // the GameObject, so sync the GameObject's div to its
+        // Transform position
+        this._element.style.left = position.x;
+        this._element.style.top  = position.y;
+
+        if(this._sprite) {
+            this._sprite.render(position);
+        }
     }
 }
