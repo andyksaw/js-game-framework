@@ -49,7 +49,7 @@ export default class Sprite {
         }
 
         this._element.style.left = x;
-        this._element.style.top = y;
+        this._element.style.top = -y;   // flip Y because the browser Y is reversed
         
         this._origin = origin;
         this._lastPosition = new Vector(x, y);

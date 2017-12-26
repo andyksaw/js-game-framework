@@ -54,7 +54,10 @@ class GameObjectFactory {
             obj.setSprite(sprite);
         }
 
-        components.forEach(c => obj.addComponent(c));
+        components.forEach(componentName => {
+            const component = new componentName(obj);
+            obj.addComponent(component);
+        });
 
         obj.createDom(id);
 

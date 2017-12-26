@@ -11,7 +11,7 @@ export default class Transform {
 
     set position(value) {
         const difference = value.subtract(this._position);
-        this._position = vector;
+        this._position = value;
         
         // update bounding box position
         // this._boundingBox.updatePosition(vector);

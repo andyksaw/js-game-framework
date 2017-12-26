@@ -67,7 +67,7 @@ export default class GameObject {
         this.onInstantiate();
     }
 
-    _addComponent(component) {
+    addComponent(component) {
         this._components.push(component);
     }
 

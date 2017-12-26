@@ -1,5 +1,5 @@
 import { Game } from 'engine/game';
-import { Plane } from 'games/flappy/components/plane';
+import { PlaneMovement } from 'games/flappy/components/PlaneMovement';
 
 import { GameObjectFactory, Sprite } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
@@ -17,6 +17,7 @@ class FlappyGame extends Game {
                 // offset: new Vector(0, 0),
             },
             components: [
+                PlaneMovement,
             ],
         });
     }

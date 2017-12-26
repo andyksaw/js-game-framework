@@ -333,8 +333,9 @@ function () {
         obj.setSprite(sprite);
       }
 
-      components.forEach(function (c) {
-        return obj.addComponent(c);
+      components.forEach(function (componentName) {
+        var component = new componentName(obj);
+        obj.addComponent(component);
       });
       obj.createDom(id);
       return obj;
@@ -558,8 +559,8 @@ function () {
       this.onInstantiate();
     }
   }, {
-    key: "_addComponent",
-    value: function _addComponent(component) {
+    key: "addComponent",
+    value: function addComponent(component) {
       this._components.push(component);
     }
   }, {
@@ -1115,7 +1116,7 @@ exports.default = _default;
 
 var _game = __webpack_require__(4);
 
-var _plane = __webpack_require__(20);
+var _PlaneMovement = __webpack_require__(26);
 
 var _objects = __webpack_require__(1);
 
@@ -1159,7 +1160,7 @@ function (_Game) {
           dimensions: new _maths.Vector(50, 50) // offset: new Vector(0, 0),
 
         },
-        components: []
+        components: [_PlaneMovement.PlaneMovement]
       });
     }
   }]);
@@ -1171,116 +1172,7 @@ var game = new FlappyGame();
 game.initialise();
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Plane = void 0;
-
-var _objects = __webpack_require__(1);
-
-var _maths = __webpack_require__(0);
-
-var _input = __webpack_require__(3);
-
-var _screen = __webpack_require__(2);
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Plane =
-/*#__PURE__*/
-function (_GameObject) {
-  _inherits(Plane, _GameObject);
-
-  function Plane() {
-    _classCallCheck(this, Plane);
-
-    return _possibleConstructorReturn(this, (Plane.__proto__ || Object.getPrototypeOf(Plane)).apply(this, arguments));
-  }
-
-  _createClass(Plane, [{
-    key: "getElementDom",
-    value: function getElementDom() {
-      var element = document.createElement('div');
-      element.id = 'plane';
-      return element;
-    }
-  }, {
-    key: "onInstantiate",
-    value: function onInstantiate() {
-      this._velocity = _maths.Vector.origin();
-    }
-  }, {
-    key: "onUpdate",
-    value: function onUpdate(timestep) {// const gravity = new Vector(0, 1);
-      // this._velocity = this._velocity.add(gravity);
-      // if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
-      //     this._velocity = new Vector(this._velocity.x, -15);
-      // }
-      // if(Keyboard.getKeyDown(Keyboard.D)) {
-      //     this._velocity = this._velocity.add(new Vector(1, 0));
-      // }
-      // if(Keyboard.getKeyDown(Keyboard.A)) {
-      //     this._velocity = this._velocity.add(new Vector(-1, 0));
-      // }
-      // // clamp max speeds
-      // if(this._velocity.y >= 15) {
-      //     this._velocity.y = 15;
-      // }
-      // if(this._velocity.x >= 10) {
-      //     this._velocity.x = 10;
-      // }
-      // if(this._velocity.x < -10) {
-      //     this._velocity.x = -10;
-      // }
-      // this._velocity = new Vector(
-      //     this._velocity.x * timestep,
-      //     this._velocity.y * timestep
-      // );
-      // this.position = this.position.add(this._velocity);
-      // // clamp horizontal axis to screen
-      // if(this.bounds.left <= 0) {
-      //     this.position.x = this.dimensions.x / 2;
-      //     this._velocity.x = 0;
-      // }
-      // if(this.bounds.right >= Viewport.width) {
-      //     this.position.x = Viewport.width - (this.dimensions.x / 2);
-      //     this._velocity.x = 0;
-      // }
-      // if(this.bounds.top <= 0) {
-      //     this.position.y = this.dimensions.y / 2;
-      //     this._velocity.y = 0;
-      // }
-      // if(this.bounds.right >= Viewport.width || this.bounds.left <= 0) {
-      //     this._velocity.x = -this._velocity.x;
-      // }
-      // if(this.bounds.bottom >= Viewport.height || this.bounds.top <= 0) {
-      //     this._velocity.y = -this._velocity.y;
-      // }
-    }
-  }]);
-
-  return Plane;
-}(_objects.GameObject);
-
-exports.Plane = Plane;
-
-/***/ }),
+/* 20 */,
 /* 21 */,
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1466,7 +1358,8 @@ function () {
       }
 
       this._element.style.left = x;
-      this._element.style.top = y;
+      this._element.style.top = -y; // flip Y because the browser Y is reversed
+
       this._origin = origin;
       this._lastPosition = new _maths.Vector(x, y);
     }
@@ -1504,21 +1397,22 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Component =
 /*#__PURE__*/
 function () {
-  function Component() {
+  function Component(gameObject) {
     _classCallCheck(this, Component);
+
+    this._gameObject = gameObject;
   }
+  /**
+   * Gets the transform for the GameObject of this component
+   */
+
 
   _createClass(Component, [{
-    key: "setGameObject",
-    value: function setGameObject(gameObject) {
-      this._gameObject = gameObject;
-    }
+    key: "onInstantiate",
+
     /**
      * Logic to run when the object is first instantiated.
      */
-
-  }, {
-    key: "onInstantiate",
     value: function onInstantiate() {}
     /**
      * Logic to run every game loop frame
@@ -1534,6 +1428,20 @@ function () {
   }, {
     key: "onDestroy",
     value: function onDestroy() {}
+  }, {
+    key: "transform",
+    get: function get() {
+      return this._gameObject.transform;
+    }
+    /**
+     * Gets the sprite for the GameObject of this component
+     */
+
+  }, {
+    key: "sprite",
+    get: function get() {
+      return this._gameObject.sprite;
+    }
   }]);
 
   return Component;
@@ -1584,7 +1492,7 @@ function () {
     },
     set: function set(value) {
       var difference = value.subtract(this._position);
-      this._position = vector; // update bounding box position
+      this._position = value; // update bounding box position
       // this._boundingBox.updatePosition(vector);
       // move any children along with this object
       // this._children.forEach(child => {
@@ -1598,6 +1506,109 @@ function () {
 }();
 
 exports.default = Transform;
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PlaneMovement = void 0;
+
+var _objects = __webpack_require__(1);
+
+var _maths = __webpack_require__(0);
+
+var _input = __webpack_require__(3);
+
+var _screen = __webpack_require__(2);
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PlaneMovement =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(PlaneMovement, _Component);
+
+  function PlaneMovement() {
+    _classCallCheck(this, PlaneMovement);
+
+    return _possibleConstructorReturn(this, (PlaneMovement.__proto__ || Object.getPrototypeOf(PlaneMovement)).apply(this, arguments));
+  }
+
+  _createClass(PlaneMovement, [{
+    key: "onInstantiate",
+    value: function onInstantiate() {
+      this._velocity = _maths.Vector.origin();
+    }
+  }, {
+    key: "onUpdate",
+    value: function onUpdate(timestep) {
+      var gravity = new _maths.Vector(0, -1);
+      this._velocity = this._velocity.add(gravity);
+
+      if (_input.Keyboard.getKeyPress(_input.Keyboard.SPACEBAR)) {
+        this._velocity = new _maths.Vector(0, 15);
+      } // if(Keyboard.getKeyDown(Keyboard.D)) {
+      //     this._velocity = this._velocity.add(new Vector(1, 0));
+      // }
+      // if(Keyboard.getKeyDown(Keyboard.A)) {
+      //     this._velocity = this._velocity.add(new Vector(-1, 0));
+      // }
+      // // clamp max speeds
+      // if(this._velocity.y >= 15) {
+      //     this._velocity.y = 15;
+      // }
+      // if(this._velocity.x >= 10) {
+      //     this._velocity.x = 10;
+      // }
+      // if(this._velocity.x < -10) {
+      //     this._velocity.x = -10;
+      // }
+      // // clamp horizontal axis to screen
+      // if(this.bounds.left <= 0) {
+      //     this.position.x = this.dimensions.x / 2;
+      //     this._velocity.x = 0;
+      // }
+      // if(this.bounds.right >= Viewport.width) {
+      //     this.position.x = Viewport.width - (this.dimensions.x / 2);
+      //     this._velocity.x = 0;
+      // }
+      // if(this.bounds.top <= 0) {
+      //     this.position.y = this.dimensions.y / 2;
+      //     this._velocity.y = 0;
+      // }
+      // if(this.bounds.right >= Viewport.width || this.bounds.left <= 0) {
+      //     this._velocity.x = -this._velocity.x;
+      // }
+      // if(this.bounds.bottom >= Viewport.height || this.bounds.top <= 0) {
+      //     this._velocity.y = -this._velocity.y;
+      // }
+
+
+      this._velocity = this._velocity.multiply(timestep);
+      this.transform.position = this.transform.position.add(this._velocity);
+    }
+  }]);
+
+  return PlaneMovement;
+}(_objects.Component);
+
+exports.PlaneMovement = PlaneMovement;
 
 /***/ })
 /******/ ]);

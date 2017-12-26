@@ -333,8 +333,9 @@ function () {
         obj.setSprite(sprite);
       }
 
-      components.forEach(function (c) {
-        return obj.addComponent(c);
+      components.forEach(function (componentName) {
+        var component = new componentName(obj);
+        obj.addComponent(component);
       });
       obj.createDom(id);
       return obj;
@@ -558,8 +559,8 @@ function () {
       this.onInstantiate();
     }
   }, {
-    key: "_addComponent",
-    value: function _addComponent(component) {
+    key: "addComponent",
+    value: function addComponent(component) {
       this._components.push(component);
     }
   }, {
@@ -1630,7 +1631,8 @@ function () {
       }
 
       this._element.style.left = x;
-      this._element.style.top = y;
+      this._element.style.top = -y; // flip Y because the browser Y is reversed
+
       this._origin = origin;
       this._lastPosition = new _maths.Vector(x, y);
     }
@@ -1668,21 +1670,22 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Component =
 /*#__PURE__*/
 function () {
-  function Component() {
+  function Component(gameObject) {
     _classCallCheck(this, Component);
+
+    this._gameObject = gameObject;
   }
+  /**
+   * Gets the transform for the GameObject of this component
+   */
+
 
   _createClass(Component, [{
-    key: "setGameObject",
-    value: function setGameObject(gameObject) {
-      this._gameObject = gameObject;
-    }
+    key: "onInstantiate",
+
     /**
      * Logic to run when the object is first instantiated.
      */
-
-  }, {
-    key: "onInstantiate",
     value: function onInstantiate() {}
     /**
      * Logic to run every game loop frame
@@ -1698,6 +1701,20 @@ function () {
   }, {
     key: "onDestroy",
     value: function onDestroy() {}
+  }, {
+    key: "transform",
+    get: function get() {
+      return this._gameObject.transform;
+    }
+    /**
+     * Gets the sprite for the GameObject of this component
+     */
+
+  }, {
+    key: "sprite",
+    get: function get() {
+      return this._gameObject.sprite;
+    }
   }]);
 
   return Component;
@@ -1748,7 +1765,7 @@ function () {
     },
     set: function set(value) {
       var difference = value.subtract(this._position);
-      this._position = vector; // update bounding box position
+      this._position = value; // update bounding box position
       // this._boundingBox.updatePosition(vector);
       // move any children along with this object
       // this._children.forEach(child => {
