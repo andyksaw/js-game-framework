@@ -744,42 +744,88 @@ function () {
     this._sprite = null;
     this._transform = new _objects.Transform(position);
   }
+  /**
+   * @return {Transform}
+   */
+
 
   _createClass(GameObject, [{
     key: "getTransform",
     value: function getTransform() {
       return this._transform;
     }
+    /**
+     * @return {Sprite}
+     */
+
   }, {
     key: "getSprite",
     value: function getSprite() {
       return this._sprite;
     }
+    /**
+     * Returns the unique identifier string of this GameObject
+     * 
+     * @return {string}
+     */
+
   }, {
     key: "getName",
     value: function getName() {
       return this._id;
     }
+    /**
+     * Returns the DOM element that represents this GameObject
+     * 
+     * @return {HTMLNode}
+     */
+
   }, {
     key: "getElement",
     value: function getElement() {
       return this._element;
     }
+    /**
+     * Returns whether the object is visible (but still executing
+     * its update loop)
+     * 
+     * @return {boolean}
+     */
+
   }, {
     key: "isVisible",
     value: function isVisible() {
       return this._isVisible;
     }
+    /**
+     * Returns whether the object will be destroyed next frame
+     * 
+     * @return {boolean}
+     */
+
   }, {
     key: "isDestroying",
     value: function isDestroying() {
       return this._isDestroying;
     }
+    /**
+     * Returns whether the object is disabled (ie. not executing
+     * its update loop and rendering)
+     * 
+     * @return {boolean}
+     */
+
   }, {
     key: "isDisabled",
     value: function isDisabled() {
       return this._isDisabled;
     }
+    /**
+     * Injects this GameObject's DOM element into the document body
+     * 
+     * @param {string} id 
+     */
+
   }, {
     key: "createDom",
     value: function createDom(id) {
@@ -790,11 +836,24 @@ function () {
       this._element = element;
       this.onInstantiate();
     }
+    /**
+     * Adds a component that hooks into this GameObject's lifecycle
+     * 
+     * @param {Component} component 
+     */
+
   }, {
     key: "addComponent",
     value: function addComponent(component) {
       this._components.push(component);
     }
+    /**
+     * Sets the Sprite that represents this GameObject. If no Sprite is
+     * set, nothing will happen in the render cycle for this object.
+     * 
+     * @param {object} config 
+     */
+
   }, {
     key: "setSprite",
     value: function setSprite() {
@@ -803,6 +862,13 @@ function () {
 
       this._sprite.appendDom();
     }
+    /**
+     * Sets this GameObject as the child of the given GameObject. In other
+     * words, it will move, scale and rotate relatively whenever the parent does.
+     * 
+     * @param {GameObject} gameObject 
+     */
+
   }, {
     key: "setParent",
     value: function setParent(gameObject) {

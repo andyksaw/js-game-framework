@@ -24,28 +24,72 @@ export default class GameObject {
         this._transform = new Transform(position);
     }
 
+    /**
+     * @return {Transform}
+     */
     getTransform() {
         return this._transform;
     }
+
+    /**
+     * @return {Sprite}
+     */
     getSprite() {
         return this._sprite;
     }
+    
+    /**
+     * Returns the unique identifier string of this GameObject
+     * 
+     * @return {string}
+     */
     getName() {
         return this._id;
     }
+
+    /**
+     * Returns the DOM element that represents this GameObject
+     * 
+     * @return {HTMLNode}
+     */
     getElement() {
         return this._element;
     }
+
+    /**
+     * Returns whether the object is visible (but still executing
+     * its update loop)
+     * 
+     * @return {boolean}
+     */
     isVisible() {
         return this._isVisible;
     }
+    
+    /**
+     * Returns whether the object will be destroyed next frame
+     * 
+     * @return {boolean}
+     */
     isDestroying() {
         return this._isDestroying;
     }
+
+    /**
+     * Returns whether the object is disabled (ie. not executing
+     * its update loop and rendering)
+     * 
+     * @return {boolean}
+     */
     isDisabled() {
         return this._isDisabled;
     }
 
+    /**
+     * Injects this GameObject's DOM element into the document body
+     * 
+     * @param {string} id 
+     */
     createDom(id) {
         const element = document.createElement('div');
         element.id = id;
@@ -57,15 +101,32 @@ export default class GameObject {
         this.onInstantiate();
     }
 
+    /**
+     * Adds a component that hooks into this GameObject's lifecycle
+     * 
+     * @param {Component} component 
+     */
     addComponent(component) {
         this._components.push(component);
     }
 
+    /**
+     * Sets the Sprite that represents this GameObject. If no Sprite is
+     * set, nothing will happen in the render cycle for this object.
+     * 
+     * @param {object} config 
+     */
     setSprite(config = {}) {
         this._sprite = new Sprite(this._transform.getPosition(), config);
         this._sprite.appendDom();
     }
-        
+     
+    /**
+     * Sets this GameObject as the child of the given GameObject. In other
+     * words, it will move, scale and rotate relatively whenever the parent does.
+     * 
+     * @param {GameObject} gameObject 
+     */
     setParent(gameObject) {
         this._transform.setParent(gameObject.getTransform());
         console.log(this._transform);
