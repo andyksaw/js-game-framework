@@ -15,6 +15,8 @@ export default class Sprite {
 
         this._lastPosition = new Vector();
         this._element = null;
+
+        this._isDirty = true;
     }
 
     /**
@@ -55,5 +57,21 @@ export default class Sprite {
         
         this._origin = origin;
         this._lastPosition = new Vector(x, y);
+    }
+
+    setOffset(value) {
+        this._isDirty = true;
+    }
+
+    setDimensions(value) {
+        this._isDirty = true;
+    }
+
+    isDirty() {
+        return this._isDirty;
+    }
+
+    clean() {
+        this._isDirty = false;
     }
 }

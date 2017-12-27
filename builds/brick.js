@@ -965,19 +965,38 @@ function () {
         return;
       }
 
-      var position = this._transform.getPosition(); // the Transform stores our world-space coordinates,
-      // but we need to render the object in screen-space
+      var screenSpacePos = null;
+      var isTransformDirty = false; // only redraw when the Transform has actually moved
 
+      if (this._transform.isDirty()) {
+        // the Transform stores our world-space coordinates,
+        // but we need to render the object in screen-space
+        screenSpacePos = this._getScreenPosition();
+        this._element.style.left = screenSpacePos.x;
+        this._element.style.top = screenSpacePos.y;
+
+        this._transform.clean();
+
+        isTransformDirty = true;
+      } // only redraw the sprite if the Sprite or Transform has moved
+
+
+      if (this._sprite && (isTransformDirty || this._sprite.isDirty())) {
+        screenSpacePos = screenSpacePos || this._getScreenPosition();
+
+        this._sprite.render(screenSpacePos);
+
+        this._sprite.clean();
+      }
+    }
+  }, {
+    key: "_getScreenPosition",
+    value: function _getScreenPosition() {
+      var position = this._transform.getPosition();
 
       var cameraPos = _screen.Camera.transform.getPosition();
 
-      var screenSpacePos = new _maths.Vector(position.x - cameraPos.x, position.y - cameraPos.y);
-      this._element.style.left = screenSpacePos.x;
-      this._element.style.top = screenSpacePos.y;
-
-      if (this._sprite) {
-        this._sprite.render(screenSpacePos, 1);
-      }
+      return new _maths.Vector(position.x - cameraPos.x, position.y - cameraPos.y);
     }
   }]);
 
@@ -1006,6 +1025,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+// import { CameraTransform } from 'engine/library/screen';
 var Camera =
 /*#__PURE__*/
 function () {
@@ -1200,6 +1220,7 @@ function () {
     this._offset = offset;
     this._lastPosition = new _maths.Vector();
     this._element = null;
+    this._isDirty = true;
   }
   /**
    * Creates the DOM that holds this sprite
@@ -1245,6 +1266,26 @@ function () {
       this._origin = origin;
       this._lastPosition = new _maths.Vector(x, y);
     }
+  }, {
+    key: "setOffset",
+    value: function setOffset(value) {
+      this._isDirty = true;
+    }
+  }, {
+    key: "setDimensions",
+    value: function setDimensions(value) {
+      this._isDirty = true;
+    }
+  }, {
+    key: "isDirty",
+    value: function isDirty() {
+      return this._isDirty;
+    }
+  }, {
+    key: "clean",
+    value: function clean() {
+      this._isDirty = false;
+    }
   }]);
 
   return Sprite;
@@ -1288,6 +1329,7 @@ function () {
     this._localPosition = _maths.Vector.origin();
     this._rotation = rotation;
     this._scale = scale;
+    this._isDirty = true; // does the transform need re-rendering?
   }
 
   _createClass(Transform, [{
@@ -1298,6 +1340,10 @@ function () {
   }, {
     key: "setPosition",
     value: function setPosition(value) {
+      if (value.x === this._position.x && value.y === this._position.y) {
+        return;
+      }
+
       var diff = value.subtract(this._position); // if this GameObject moved, update its local position relative to
       // its parent
 
@@ -1334,6 +1380,8 @@ function () {
           }
         }
       }
+
+      this._isDirty = true;
     }
   }, {
     key: "getParent",
@@ -1361,6 +1409,36 @@ function () {
     key: "getLocalPosition",
     value: function getLocalPosition() {
       return this._localPosition;
+    }
+    /**
+     * Sets the Transform as 'clean'. When in a 'clean' state, the Transform
+     * will not redraw until its manipulated again (move, scale, rotate)
+     */
+
+  }, {
+    key: "clean",
+    value: function clean() {
+      this._isDirty = false;
+    }
+    /**
+     * Forces a re-draw
+     */
+
+  }, {
+    key: "dirty",
+    value: function dirty() {
+      this._isDirty = true;
+    }
+    /**
+     * Returns whether the Transform needs to be redrawn due to a manipulation
+     * 
+     * @return {boolean}
+     */
+
+  }, {
+    key: "isDirty",
+    value: function isDirty() {
+      return this._isDirty;
     }
   }]);
 

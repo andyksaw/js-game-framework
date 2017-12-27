@@ -8,12 +8,18 @@ export default class Transform {
         this._localPosition = Vector.origin();
         this._rotation = rotation;
         this._scale = scale;
+
+        this._isDirty = true;  // does the transform need re-rendering?
     }
 
     getPosition() {
         return this._position;
     }
     setPosition(value) {
+        if(value.x === this._position.x && value.y === this._position.y) {
+            return;
+        }
+
         const diff = value.subtract(this._position);
 
         // if this GameObject moved, update its local position relative to
@@ -29,6 +35,8 @@ export default class Transform {
                 child.setPosition(child.getPosition().add(diff));
             }
         }
+
+        this._isDirty = true;
     }
 
     getParent() {
@@ -49,5 +57,29 @@ export default class Transform {
 
     getLocalPosition() {
         return this._localPosition;
+    }
+
+    /**
+     * Sets the Transform as 'clean'. When in a 'clean' state, the Transform
+     * will not redraw until its manipulated again (move, scale, rotate)
+     */
+    clean() {
+        this._isDirty = false;
+    }
+    
+    /**
+     * Forces a re-draw
+     */
+    dirty() {
+        this._isDirty = true;
+    }
+
+    /**
+     * Returns whether the Transform needs to be redrawn due to a manipulation
+     * 
+     * @return {boolean}
+     */
+    isDirty() {
+        return this._isDirty;
     }
 }

@@ -198,22 +198,41 @@ export default class GameObject {
         if(!this._isVisible || this._isDisabled || this._isDestroying) {
             return;
         }
+        
+        let screenSpacePos = null;
+        let isTransformDirty = false;
+        
+        // only redraw when the Transform has actually moved
+        if(this._transform.isDirty()) {
+            // the Transform stores our world-space coordinates,
+            // but we need to render the object in screen-space
+            screenSpacePos = this._getScreenPosition();
 
+            this._element.style.left = screenSpacePos.x;
+            this._element.style.top  = screenSpacePos.y;
+
+            this._transform.clean();
+
+            isTransformDirty = true;
+        }
+
+        // only redraw the sprite if the Sprite or Transform has moved
+        if(this._sprite && (isTransformDirty || this._sprite.isDirty())) {
+            screenSpacePos = screenSpacePos || this._getScreenPosition();
+
+            this._sprite.render(screenSpacePos);
+            this._sprite.clean();
+        }
+
+    }
+
+    _getScreenPosition() {
         const position = this._transform.getPosition();
-
-        // the Transform stores our world-space coordinates,
-        // but we need to render the object in screen-space
         const cameraPos = Camera.transform.getPosition();
-        const screenSpacePos = new Vector(
+        
+        return new Vector(
             position.x - cameraPos.x,
             position.y - cameraPos.y
         );
-
-        this._element.style.left = screenSpacePos.x;
-        this._element.style.top  = screenSpacePos.y;
-
-        if(this._sprite) {
-            this._sprite.render(screenSpacePos, 1);
-        }
     }
 }

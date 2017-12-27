@@ -1,6 +1,5 @@
 import { Game } from 'engine/game';
 import { PlaneMovement } from 'games/flappy/components/PlaneMovement';
-import { PlaneMovement2 } from 'games/flappy/components/PlaneMovement2';
 
 import { SceneGraph, Sprite } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
@@ -30,9 +29,6 @@ class FlappyGame extends Game {
                 asset: 'assets/images/planeGreen1.png',
                 dimensions: new Vector(50, 50),
             },
-            components: [
-                PlaneMovement2,
-            ],
         });
         
 
