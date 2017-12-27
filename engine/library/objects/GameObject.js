@@ -90,10 +90,14 @@ export default class GameObject {
      * 
      * @param {string} id 
      */
-    createDom(id) {
+    createDom(id, zIndex = 0) {
         const element = document.createElement('div');
         element.id = id;
         element.classList.add('gameObject');
+
+        if(zIndex !== 0) {
+            element.style.zIndex = zIndex;
+        }
 
         document.body.appendChild(element);
         this._element = element;
@@ -155,6 +159,7 @@ export default class GameObject {
      */
     setDisabled(isDisabled) {
         this._isDisabled = isDisabled;
+        this._element.style.display = isDisabled ? 'none' : 'hidden';
     }
 
     /**

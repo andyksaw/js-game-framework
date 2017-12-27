@@ -45,7 +45,6 @@ export default class Transform {
     setParent(transform) {
         this._parent = transform;
         this._localPosition = this._position.subtract(transform.getPosition());
-        console.log(this._localPosition);
     }
 
     getChildren() {
@@ -57,6 +56,16 @@ export default class Transform {
 
     getLocalPosition() {
         return this._localPosition;
+    }
+
+    /**
+     * Shortcut method for adding the given vector to the current position
+     * 
+     * @param {Vector} value 
+     */
+    translate(value) {
+        const newPos = this._position.add(value);
+        this.setPosition(newPos);
     }
 
     /**

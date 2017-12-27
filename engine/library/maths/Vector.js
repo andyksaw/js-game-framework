@@ -1,3 +1,5 @@
+import { Maths } from 'engine/library/maths';
+
 /**
  * Represents a coordinate in 2D space
  */
@@ -67,6 +69,13 @@ export default class Vector {
         return new Vector(
             this.x * scalar,
             this.y * scalar
+        );
+    }
+
+    clamp(min, max) {
+        return new Vector(
+            Maths.clamp(this.x, min.x, max.x),
+            Maths.clamp(this.y, min.y, max.y)
         );
     }
 

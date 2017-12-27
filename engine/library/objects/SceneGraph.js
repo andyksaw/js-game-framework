@@ -37,6 +37,7 @@ class SceneGraph {
             position = new Vector(0, 0),
             components = [],
             sprite = {},
+            order = 0,
         } = config;
 
         if(id == null) {
@@ -50,7 +51,7 @@ class SceneGraph {
         this._hierarchy.push(obj);
         this._gameObjects.set(id, obj);
 
-        if(sprite.asset) {
+        if(sprite.assets) {
             obj.setSprite(sprite);
         }
 
@@ -59,7 +60,7 @@ class SceneGraph {
             obj.addComponent(component);
         });
 
-        obj.createDom(id);
+        obj.createDom(id, order);
 
         return obj;
     }

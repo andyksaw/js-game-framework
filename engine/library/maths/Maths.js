@@ -1,4 +1,4 @@
-export default class Math {
+export default class Maths {
     /**
      * Returns a whole number between [min] and [max]
      */

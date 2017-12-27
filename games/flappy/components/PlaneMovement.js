@@ -1,64 +1,37 @@
 import { Component } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Keyboard } from 'engine/library/input';
-import { Viewport, Camera } from 'engine/library/screen';
+import { Viewport } from 'engine/library/screen';
+import { Maths } from 'engine/library/maths';
 
 export class PlaneMovement extends Component {
-    constructor(gameObject) {
-        super(gameObject);
-    }
-
     onInstantiate() {
         this._velocity = Vector.origin();
     }
 
     onUpdate(timestep) {
-        // const gravity = new Vector(0, -1);
-        // this._velocity = this._velocity.add(gravity);
+        const gravity = new Vector(0, -1);
+        this._velocity = this._velocity.add(gravity);
 
-        // if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
-        //     this._velocity = new Vector(0, 15);
-        // }
-
-        // this._velocity = this._velocity.multiply(timestep);
-
-        // this.transform.position = this.transform.position
-        //     .add(this._velocity);
-
-        
-        let velocity = this._velocity;
-        if(Keyboard.getKeyPress(Keyboard.A)) {
-            velocity = velocity.add(new Vector(-3, 0));
+        // take in keyboard input
+        if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
+            this._velocity = new Vector(this._velocity.x, 10);
         }
         if(Keyboard.getKeyPress(Keyboard.D)) {
-            velocity = velocity.add(new Vector(3, 0));
+            this._velocity = this._velocity.add(new Vector(1, 0));
         }
-        if(Keyboard.getKeyPress(Keyboard.W)) {
-            velocity = velocity.add(new Vector(0, 3));
+        if(Keyboard.getKeyPress(Keyboard.A)) {
+            this._velocity = this._velocity.add(new Vector(-1, 0));
         }
-        if(Keyboard.getKeyPress(Keyboard.S)) {
-            velocity = velocity.add(new Vector(0, -3));
-        }
+
+        // set max speeds
+        this._velocity.x = Maths.clamp(this._velocity.x, -3.5, 3.5);
+        this._velocity.y = Math.max(this._velocity.y, -10);
+
+        this._velocity = this._velocity.multiply(timestep);
 
         const transform = this.gameObject.getTransform();
-        // console.log(transform);
-        transform.setPosition(transform.getPosition().add(velocity));
-        // this._velocity = velocity;
-
-
-        let cameraPos = Camera.transform.getPosition();
-        if(Keyboard.getKeyPress(Keyboard.ARROW_LEFT)) {
-            cameraPos = cameraPos.add(new Vector(-3, 0));
-        }
-        if(Keyboard.getKeyPress(Keyboard.ARROW_RIGHT)) {
-            cameraPos = cameraPos.add(new Vector(3, 0));
-        }
-        if(Keyboard.getKeyPress(Keyboard.ARROW_UP)) {
-            cameraPos = cameraPos.add(new Vector(0, 3));
-        }
-        if(Keyboard.getKeyPress(Keyboard.ARROW_DOWN)) {
-            cameraPos = cameraPos.add(new Vector(0, -3));
-        }
-        Camera.transform.setPosition(cameraPos);
+        const newPos = transform.getPosition().add(this._velocity);
+        transform.setPosition(newPos);
     }
 }

@@ -3,15 +3,21 @@ import { Vector } from 'engine/library/maths';
 export default class Sprite {
     constructor(origin, config) {
         const {
-            asset,
+            assets,
             dimensions = new Vector(),
             offset = new Vector(),
+            timing = 150,
         } = config;
 
-        this._asset = asset;
+        this._assets = assets;
         this._origin = origin;
         this._dimensions = dimensions;
         this._offset = offset;
+
+        if(assets.length > 1) {
+            this._frameIndex = 0;
+            this._animationTimer = setInterval(this._updateFrame.bind(this), timing);
+        }
 
         this._lastPosition = new Vector();
         this._element = null;
@@ -30,7 +36,7 @@ export default class Sprite {
         element.style.height = this._dimensions.y;
         element.style.left = this._origin.x;
         element.style.top = this._origin.y;
-        element.style.backgroundImage = `url(${this._asset})`;
+        element.style.backgroundImage = `url(${this._assets[0]})`;
 
         document.body.appendChild(element);
 
@@ -57,6 +63,12 @@ export default class Sprite {
         
         this._origin = origin;
         this._lastPosition = new Vector(x, y);
+    }
+
+    _updateFrame() {
+        // TODO: update using requestAnimationFrame()
+        this._frameIndex = ++this._frameIndex % this._assets.length;
+        this._element.style.backgroundImage = `url(${this._assets[this._frameIndex]})`;
     }
 
     setOffset(value) {
