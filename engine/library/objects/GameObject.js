@@ -129,7 +129,7 @@ export default class GameObject {
      */
     setParent(gameObject) {
         this._transform.setParent(gameObject.getTransform());
-        console.log(this._transform);
+        gameObject.getTransform().addChild(this._transform);
     }
 
     /**

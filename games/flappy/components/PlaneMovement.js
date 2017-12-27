@@ -46,20 +46,20 @@ export class PlaneMovement extends Component {
         // this._velocity = velocity;
 
 
-        let cameraPos = Camera.transform.getPosition();
-        if(Keyboard.getKeyPress(Keyboard.ARROW_LEFT)) {
-            cameraPos = cameraPos.add(new Vector(-3, 0));
-        }
-        if(Keyboard.getKeyPress(Keyboard.ARROW_RIGHT)) {
-            cameraPos = cameraPos.add(new Vector(3, 0));
-        }
-        if(Keyboard.getKeyPress(Keyboard.ARROW_UP)) {
-            cameraPos = cameraPos.add(new Vector(0, 3));
-        }
-        if(Keyboard.getKeyPress(Keyboard.ARROW_DOWN)) {
-            cameraPos = cameraPos.add(new Vector(0, -3));
-        }
+        // let cameraPos = Camera.transform.getPosition();
+        // if(Keyboard.getKeyPress(Keyboard.ARROW_LEFT)) {
+        //     cameraPos = cameraPos.add(new Vector(-3, 0));
+        // }
+        // if(Keyboard.getKeyPress(Keyboard.ARROW_RIGHT)) {
+        //     cameraPos = cameraPos.add(new Vector(3, 0));
+        // }
+        // if(Keyboard.getKeyPress(Keyboard.ARROW_UP)) {
+        //     cameraPos = cameraPos.add(new Vector(0, 3));
+        // }
+        // if(Keyboard.getKeyPress(Keyboard.ARROW_DOWN)) {
+        //     cameraPos = cameraPos.add(new Vector(0, -3));
+        // }
 
-        Camera.transform.setPosition(cameraPos);
+        // Camera.transform.setPosition(cameraPos);
     }
 }

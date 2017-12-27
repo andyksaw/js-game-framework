@@ -874,7 +874,7 @@ function () {
     value: function setParent(gameObject) {
       this._transform.setParent(gameObject.getTransform());
 
-      console.log(this._transform);
+      gameObject.getTransform().addChild(this._transform);
     }
     /**
      * Sets the visibility of the object. Setting to false
@@ -1284,6 +1284,7 @@ function () {
 
     this._position = position;
     this._parent = null;
+    this._children = [];
     this._localPosition = _maths.Vector.origin();
     this._rotation = rotation;
     this._scale = scale;
@@ -1297,19 +1298,42 @@ function () {
   }, {
     key: "setPosition",
     value: function setPosition(value) {
-      var transformParent = this._parent; // console.log(this);
-      // if(transformParent) {
-      //     let combinedLocal = this._localPosition;
-      //     while(transformParent) {
-      //         console.log('test');
-      //         combinedLocal = combinedLocal.multiply(parent.localPosition);
-      //         transformParent = transformParent.parent;
-      //     }
-      //     this._position = combinedLocal.multiply
-      //     return;
-      // }
+      var diff = value.subtract(this._position); // if this GameObject moved, update its local position relative to
+      // its parent
 
       this._position = value;
+
+      if (this._parent) {
+        this._localPosition = value.subtract(this._parent.getPosition());
+      } // if this GameObject has children, update their positions
+
+
+      if (this._children.length > 0) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this._children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _child = _step.value;
+
+            _child.setPosition(_child.getPosition().add(diff));
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
     }
   }, {
     key: "getParent",
@@ -1321,6 +1345,17 @@ function () {
     value: function setParent(transform) {
       this._parent = transform;
       this._localPosition = this._position.subtract(transform.getPosition());
+      console.log(this._localPosition);
+    }
+  }, {
+    key: "getChildren",
+    value: function getChildren() {
+      return this._children;
+    }
+  }, {
+    key: "addChild",
+    value: function addChild(transform) {
+      this._children.push(transform);
     }
   }, {
     key: "getLocalPosition",
@@ -1496,6 +1531,8 @@ var _game = __webpack_require__(4);
 
 var _PlaneMovement = __webpack_require__(24);
 
+var _PlaneMovement2 = __webpack_require__(26);
+
 var _objects = __webpack_require__(1);
 
 var _maths = __webpack_require__(0);
@@ -1532,26 +1569,36 @@ function (_Game) {
     value: function onStart() {
       _screen.Camera.transform.position = new _maths.Vector(15, 0);
 
-      var plane = _objects.SceneGraph.instantiate('plane', {
+      var planeRed = _objects.SceneGraph.instantiate('plane', {
         position: new _maths.Vector(50, -50),
         collider: _collisions.BoxCollider,
         sprite: {
           asset: 'assets/images/planeRed1.png',
           dimensions: new _maths.Vector(50, 50) // offset: new Vector(0, 0),
 
-        }
+        },
+        components: [_PlaneMovement.PlaneMovement]
       });
 
-      var plane2 = _objects.SceneGraph.instantiate('plane2', {
+      var planeGreen = _objects.SceneGraph.instantiate('planeGreen', {
         position: new _maths.Vector(150, -75),
         sprite: {
           asset: 'assets/images/planeGreen1.png',
           dimensions: new _maths.Vector(50, 50)
         },
-        components: [_PlaneMovement.PlaneMovement]
+        components: [_PlaneMovement2.PlaneMovement2]
       });
 
-      plane2.setParent(plane);
+      var planeBlue = _objects.SceneGraph.instantiate('planeBlue', {
+        position: new _maths.Vector(150, -155),
+        sprite: {
+          asset: 'assets/images/planeBlue1.png',
+          dimensions: new _maths.Vector(50, 50)
+        }
+      });
+
+      planeGreen.setParent(planeRed);
+      planeBlue.setParent(planeGreen);
 
       var rock = _objects.SceneGraph.instantiate('rock', {
         position: new _maths.Vector(350, -150),
@@ -1649,26 +1696,20 @@ function (_Component) {
       var transform = this.gameObject.getTransform(); // console.log(transform);
 
       transform.setPosition(transform.getPosition().add(velocity)); // this._velocity = velocity;
-
-      var cameraPos = _screen.Camera.transform.getPosition();
-
-      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_LEFT)) {
-        cameraPos = cameraPos.add(new _maths.Vector(-3, 0));
-      }
-
-      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_RIGHT)) {
-        cameraPos = cameraPos.add(new _maths.Vector(3, 0));
-      }
-
-      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_UP)) {
-        cameraPos = cameraPos.add(new _maths.Vector(0, 3));
-      }
-
-      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_DOWN)) {
-        cameraPos = cameraPos.add(new _maths.Vector(0, -3));
-      }
-
-      _screen.Camera.transform.setPosition(cameraPos);
+      // let cameraPos = Camera.transform.getPosition();
+      // if(Keyboard.getKeyPress(Keyboard.ARROW_LEFT)) {
+      //     cameraPos = cameraPos.add(new Vector(-3, 0));
+      // }
+      // if(Keyboard.getKeyPress(Keyboard.ARROW_RIGHT)) {
+      //     cameraPos = cameraPos.add(new Vector(3, 0));
+      // }
+      // if(Keyboard.getKeyPress(Keyboard.ARROW_UP)) {
+      //     cameraPos = cameraPos.add(new Vector(0, 3));
+      // }
+      // if(Keyboard.getKeyPress(Keyboard.ARROW_DOWN)) {
+      //     cameraPos = cameraPos.add(new Vector(0, -3));
+      // }
+      // Camera.transform.setPosition(cameraPos);
     }
   }]);
 
@@ -1799,6 +1840,85 @@ function () {
 var _default = new SceneGraph();
 
 exports.default = _default;
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PlaneMovement2 = void 0;
+
+var _objects = __webpack_require__(1);
+
+var _maths = __webpack_require__(0);
+
+var _input = __webpack_require__(3);
+
+var _screen = __webpack_require__(2);
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PlaneMovement2 =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(PlaneMovement2, _Component);
+
+  function PlaneMovement2(gameObject) {
+    _classCallCheck(this, PlaneMovement2);
+
+    return _possibleConstructorReturn(this, (PlaneMovement2.__proto__ || Object.getPrototypeOf(PlaneMovement2)).call(this, gameObject));
+  }
+
+  _createClass(PlaneMovement2, [{
+    key: "onInstantiate",
+    value: function onInstantiate() {
+      this._velocity = _maths.Vector.origin();
+    }
+  }, {
+    key: "onUpdate",
+    value: function onUpdate(timestep) {
+      var velocity = this._velocity;
+
+      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_LEFT)) {
+        velocity = velocity.add(new _maths.Vector(-4, 0));
+      }
+
+      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_RIGHT)) {
+        velocity = velocity.add(new _maths.Vector(4, 0));
+      }
+
+      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_UP)) {
+        velocity = velocity.add(new _maths.Vector(0, 4));
+      }
+
+      if (_input.Keyboard.getKeyPress(_input.Keyboard.ARROW_DOWN)) {
+        velocity = velocity.add(new _maths.Vector(0, -4));
+      }
+
+      var transform = this.gameObject.getTransform();
+      transform.setPosition(transform.getPosition().add(velocity));
+    }
+  }]);
+
+  return PlaneMovement2;
+}(_objects.Component);
+
+exports.PlaneMovement2 = PlaneMovement2;
 
 /***/ })
 /******/ ]);

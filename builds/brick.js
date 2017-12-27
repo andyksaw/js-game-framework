@@ -874,7 +874,7 @@ function () {
     value: function setParent(gameObject) {
       this._transform.setParent(gameObject.getTransform());
 
-      console.log(this._transform);
+      gameObject.getTransform().addChild(this._transform);
     }
     /**
      * Sets the visibility of the object. Setting to false
@@ -1284,6 +1284,7 @@ function () {
 
     this._position = position;
     this._parent = null;
+    this._children = [];
     this._localPosition = _maths.Vector.origin();
     this._rotation = rotation;
     this._scale = scale;
@@ -1297,19 +1298,42 @@ function () {
   }, {
     key: "setPosition",
     value: function setPosition(value) {
-      var transformParent = this._parent; // console.log(this);
-      // if(transformParent) {
-      //     let combinedLocal = this._localPosition;
-      //     while(transformParent) {
-      //         console.log('test');
-      //         combinedLocal = combinedLocal.multiply(parent.localPosition);
-      //         transformParent = transformParent.parent;
-      //     }
-      //     this._position = combinedLocal.multiply
-      //     return;
-      // }
+      var diff = value.subtract(this._position); // if this GameObject moved, update its local position relative to
+      // its parent
 
       this._position = value;
+
+      if (this._parent) {
+        this._localPosition = value.subtract(this._parent.getPosition());
+      } // if this GameObject has children, update their positions
+
+
+      if (this._children.length > 0) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this._children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _child = _step.value;
+
+            _child.setPosition(_child.getPosition().add(diff));
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
     }
   }, {
     key: "getParent",
@@ -1321,6 +1345,17 @@ function () {
     value: function setParent(transform) {
       this._parent = transform;
       this._localPosition = this._position.subtract(transform.getPosition());
+      console.log(this._localPosition);
+    }
+  }, {
+    key: "getChildren",
+    value: function getChildren() {
+      return this._children;
+    }
+  }, {
+    key: "addChild",
+    value: function addChild(transform) {
+      this._children.push(transform);
     }
   }, {
     key: "getLocalPosition",
