@@ -948,6 +948,7 @@ function () {
         this._transform = new _objects.Transform(); // since a camera move needs to update everything in view,
         // set all objects in the viewport as 'dirty' so they get
         // redrawn
+        // TODO: viewport culling
 
         this._transform.setPosition = function (value) {
           _this._transform._position = value;
@@ -1065,21 +1066,34 @@ var Viewport =
 /*#__PURE__*/
 function () {
   function Viewport() {
+    var viewportWidth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 800;
+    var viewportHeight = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 400;
+
     _classCallCheck(this, Viewport);
 
-    this._viewportHeight;
-    this._viewportWidth;
+    this._browserHeight = 0;
+    this._browserWidth = 0;
+
+    this._recalculateScreen();
+
+    window.addEventListener('resize', this._recalculateScreen.bind(this));
   }
 
   _createClass(Viewport, [{
+    key: "_recalculateScreen",
+    value: function _recalculateScreen() {
+      this._browserHeight = window.innerHeight;
+      this._browserWidth = window.innerWidth;
+    }
+  }, {
     key: "width",
     get: function get() {
-      return window.innerWidth;
+      return this._browserWidth;
     }
   }, {
     key: "height",
     get: function get() {
-      return window.innerHeight;
+      return this._browserHeight;
     }
   }, {
     key: "screen",
@@ -1534,9 +1548,24 @@ exports.default = _default;
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "Collidable", {
+  enumerable: true,
+  get: function get() {
+    return _Collidable.default;
+  }
+});
+
+var _Collidable = _interopRequireDefault(__webpack_require__(32));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
 /* 18 */,
@@ -1927,6 +1956,16 @@ function (_Component) {
         }
       });
 
+      for (var _i = 0; _i < 2; _i++) {
+        _objects.SceneGraph.instantiate('groundBottom' + _i, {
+          position: new _maths.Vector(808 * _i, -_screen.Viewport.height + 71),
+          sprite: {
+            assets: ['assets/images/groundDirt.png'],
+            dimensions: new _maths.Vector(808, 71)
+          }
+        });
+      }
+
       this._scrollSpeed = new _maths.Vector(3, 0);
     }
   }, {
@@ -1943,6 +1982,79 @@ function (_Component) {
 }(_objects.Component);
 
 exports.SceneManager = SceneManager;
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Collidable =
+/*#__PURE__*/
+function () {
+  function Collidable() {
+    _classCallCheck(this, Collidable);
+  }
+
+  _createClass(Collidable, [{
+    key: "getType",
+
+    /**
+     * Returns the type of collidable that should be checked
+     */
+    value: function getType() {
+      throw new Error('getType() not implemented');
+    }
+  }, {
+    key: "getRectangle",
+    value: function getRectangle() {
+      throw new Error('getRectangle() not implemented');
+    }
+  }, {
+    key: "getCircle",
+    value: function getCircle() {
+      throw new Error('getCircle() not implemented');
+    }
+    /**
+     * Returns whether the given collidable is currently colliding
+     * with the current collidable.
+     * 
+     * @param {Collidable} collidable 
+     * 
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(collidable) {}
+  }], [{
+    key: "SHAPE_BOX",
+    get: function get() {
+      return 1;
+    }
+  }, {
+    key: "SHAPE_CIRCLE",
+    get: function get() {
+      return 2;
+    }
+  }]);
+
+  return Collidable;
+}();
+
+exports.default = Collidable;
 
 /***/ })
 /******/ ]);

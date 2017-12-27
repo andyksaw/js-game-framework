@@ -30,6 +30,17 @@ export class SceneManager extends Component {
             },
         });
 
+        for(let i = 0; i < 2; i++) {
+            SceneGraph.instantiate('groundBottom'+i, {
+                position: new Vector(808 * i, -Viewport.height + 71),
+                sprite: {
+                    assets: ['assets/images/groundDirt.png'],
+                    dimensions: new Vector(808, 71),
+                },
+            });
+        }
+        
+
         this._scrollSpeed = new Vector(3, 0);
     }
 

@@ -8,6 +8,8 @@ class Camera {
             // since a camera move needs to update everything in view,
             // set all objects in the viewport as 'dirty' so they get
             // redrawn
+            
+            // TODO: viewport culling
             this._transform.setPosition = (value) => {
                 this._transform._position = value;
                 SceneGraph.hierarchy.forEach(obj => {

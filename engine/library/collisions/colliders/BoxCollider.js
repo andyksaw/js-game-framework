@@ -1,26 +1,71 @@
-export default class BoxCollider {
+import { Collidable } from 'engine/library/collisions';
+
+export default class BoxCollider extends Collidable {
     constructor(origin, offset, dimensions) {
-        const halfWidth = dimensions.x / 2;
-        const halfHeight = dimensions.y / 2;
-
-        const position = origin.add(offset);
-
-        this._topLeft       = position.add(new Vector(-halfWidth, halfHeight));
-        this._topRight      = position.add(new Vector(halfWidth, halfHeight));
-        this._bottomLeft    = position.add(new Vector(-halfWidth, -halfHeight));
-        this._bottomRight   = position.add(new Vector(halfWidth, -halfHeight));
+        this._origin = origin;
+        this._offset = offset;
+        this._dimensions = dimensions;
     }
 
-    getTopLeft() {
-        return this._topLeft;
+    get position() {
+        return this._origin.add(this._offset);
     }
-    getTopRight() {
-        return this._topRight;
+    get left() {
+        return this.position.x - (this._dimensions.x / 2);
     }
-    getBottomLeft() {
-        return this._bottomLeft;
+    get right() {
+        return this.position.x + (this._dimensions.x / 2);
     }
-    getBottomRight() {
-        return this._bottomRight;
+    get top() {
+        return this.position.y + (this._dimensions.y / 2);
     }
+    get bottom() {
+        return this.position.y - (this._dimensions.y / 2);
+    }
+
+
+    getType() {
+        return Collidable.SHAPE_BOX;
+    }
+
+    getRect() {
+        return {
+            left: this.left,
+            right: this.right,
+            top: this.top,
+            bottom: this.bottom,
+        };
+    }
+
+    collidesWith(collidable) {
+        switch(collidable.getType()) {
+            case Collidable.SHAPE_BOX:
+                return this.rectToRectCheck(collidable.getRect());
+
+            case Collidable.SHAPE_CIRCLE:
+                return this.rectToCircleCheck(collidable.getCircle());
+        }
+    }
+    
+    /**
+     * Performs a collision detection against another rectangle
+     * 
+     * @param {object} rect 
+     */
+    rectToRectCheck(rect) {
+        return (
+            rect.right > this.left ||
+            rect.left < this.right ||
+            rect.top > this.bottom ||
+            rect.bottom < this.top
+        );
+    }
+
+    rectToCircleCheck(circle) {
+        // return (
+
+        // );
+        return false;
+    }
+
 }
