@@ -40,7 +40,7 @@ export default class Sprite {
      * 
      * @param {Vector} origin 
      */
-    render(origin) {
+    render(origin, scale = 1) {
         const x = origin.x + this._offset.x;
         const y = origin.y + this._offset.y;
 
@@ -50,6 +50,8 @@ export default class Sprite {
 
         this._element.style.left = x;
         this._element.style.top = -y;   // flip Y because the browser Y is reversed
+        this._element.style.width = this._dimensions.x * scale;
+        this._element.style.height = this._dimensions.y * scale;
         
         this._origin = origin;
         this._lastPosition = new Vector(x, y);

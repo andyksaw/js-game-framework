@@ -1,5 +1,8 @@
 import { Viewport } from 'engine/library/screen';
 
+/**
+ * Collection of methods to interact with the HTML canvas
+ */
 class Canvas {
     getContext() {
         if(!this._context) {

@@ -4,7 +4,7 @@ import { GameObject } from 'engine/library/objects';
 /**
  * Singleton to hold all references to all instantiated GameObjects
  */
-class GameObjectFactory {
+class SceneGraph {
     constructor() {
         // an ordered list (array) of all GameObjects
         this._hierarchy = [];
@@ -78,4 +78,4 @@ class GameObjectFactory {
     }
 }
 
-export default new GameObjectFactory();
+export default new SceneGraph();

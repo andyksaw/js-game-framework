@@ -4,6 +4,10 @@ import { Keyboard } from 'engine/library/input';
 import { Viewport, Camera } from 'engine/library/screen';
 
 export class PlaneMovement extends Component {
+    constructor(gameObject) {
+        super(gameObject);
+    }
+
     onInstantiate() {
         this._velocity = Vector.origin();
     }
@@ -21,18 +25,41 @@ export class PlaneMovement extends Component {
         // this.transform.position = this.transform.position
         //     .add(this._velocity);
 
-
+        
+        let velocity = this._velocity;
         if(Keyboard.getKeyPress(Keyboard.A)) {
-            Camera.transform.position = Camera.transform.position.add(new Vector(-1, 0));
+            velocity = velocity.add(new Vector(-3, 0));
         }
         if(Keyboard.getKeyPress(Keyboard.D)) {
-            Camera.transform.position = Camera.transform.position.add(new Vector(1, 0));
+            velocity = velocity.add(new Vector(3, 0));
         }
         if(Keyboard.getKeyPress(Keyboard.W)) {
-            Camera.transform.position = Camera.transform.position.add(new Vector(0, 1));
+            velocity = velocity.add(new Vector(0, 3));
         }
         if(Keyboard.getKeyPress(Keyboard.S)) {
-            Camera.transform.position = Camera.transform.position.add(new Vector(0, -1));
+            velocity = velocity.add(new Vector(0, -3));
         }
+
+        const transform = this.gameObject.getTransform();
+        // console.log(transform);
+        transform.setPosition(transform.getPosition().add(velocity));
+        // this._velocity = velocity;
+
+
+        let cameraPos = Camera.transform.getPosition();
+        if(Keyboard.getKeyPress(Keyboard.ARROW_LEFT)) {
+            cameraPos = cameraPos.add(new Vector(-3, 0));
+        }
+        if(Keyboard.getKeyPress(Keyboard.ARROW_RIGHT)) {
+            cameraPos = cameraPos.add(new Vector(3, 0));
+        }
+        if(Keyboard.getKeyPress(Keyboard.ARROW_UP)) {
+            cameraPos = cameraPos.add(new Vector(0, 3));
+        }
+        if(Keyboard.getKeyPress(Keyboard.ARROW_DOWN)) {
+            cameraPos = cameraPos.add(new Vector(0, -3));
+        }
+
+        Camera.transform.setPosition(cameraPos);
     }
 }

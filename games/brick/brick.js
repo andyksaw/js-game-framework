@@ -3,21 +3,21 @@ import { Block } from 'games/brick/components/block';
 import { Bat } from 'games/brick/components/bat';
 import { Ball } from 'games/brick/components/ball';
 
-import { GameObjectFactory } from 'engine/library/objects';
+import { SceneGraph } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Viewport, Canvas } from 'engine/library/screen';
 import { BoxCollider } from 'engine/library/collisions';
 
 class BrickGame extends Game {
     onStart() {
-        const bat = GameObjectFactory.instantiate(Bat, {
+        const bat = SceneGraph.instantiate(Bat, {
             id: 'bat',
             dimensions: new Vector(180, 20),
             position: new Vector(50, 50),
             collider: BoxCollider,
         });
 
-        const ball = GameObjectFactory.instantiate(Ball, {
+        const ball = SceneGraph.instantiate(Ball, {
             id: 'ball',
             dimensions: new Vector(25, 25),
             position: Viewport.origin,

@@ -1,4 +1,4 @@
-import { GameObjectFactory } from 'engine/library/objects';
+import { SceneGraph } from 'engine/library/objects';
 
 /**
  * Desired amount of time in milliseconds between frames
@@ -47,7 +47,7 @@ function gameLoop() {
  *  Delegates work to every game object
  */
 function onUpdate(timestep) {
-    const hierarchy = GameObjectFactory.hierarchy;
+    const hierarchy = SceneGraph.hierarchy;
     const corpseObjects = [];
 
     // loop over a buffer so that newly instantiated objects
@@ -57,7 +57,7 @@ function onUpdate(timestep) {
         const obj = hierarchy[i];
 
         // any objects marked for deletion should not be executed
-        if(obj.isDestroying) {
+        if(obj.isDestroying()) {
             corpseObjects.push(obj);
             continue;
         }
@@ -66,7 +66,7 @@ function onUpdate(timestep) {
 
     // cleanup any objects marked for deletion
     if(corpseObjects.length > 0) {
-        GameObjectFactory.removeBatch(corpseObjects);
+        SceneGraph.removeBatch(corpseObjects);
     }
 }
 
@@ -74,7 +74,7 @@ function onUpdate(timestep) {
  * Renders every visible GameObject to DOM every frame
  */
 function onRender() {
-    GameObjectFactory
+    SceneGraph
         .hierarchy
         .forEach(obj => obj.render());
 }

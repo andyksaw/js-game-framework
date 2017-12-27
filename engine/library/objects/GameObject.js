@@ -19,43 +19,32 @@ export default class GameObject {
         this._isDisabled = false;
         
         this._components = [];
-        this._transform = new Transform(position);
         this._sprite = null;
         
-        // this._boundingBox = new BoundingBox(position, dimensions);
-
-        // child GameObjects of this GameObject
-        // this._children = [];
+        this._transform = new Transform(position);
     }
 
-    get transform() {
+    getTransform() {
         return this._transform;
     }
-    get sprite() {
+    getSprite() {
         return this._sprite;
     }
-    get isVisible() {
-        return this._isVisible;
-    }
-    get name() {
+    getName() {
         return this._id;
     }
-    get element() {
+    getElement() {
         return this._element;
     }
-    // get bounds() {
-    //     return this._boundingBox;
-    // }
-    get isDestroying() {
+    isVisible() {
+        return this._isVisible;
+    }
+    isDestroying() {
         return this._isDestroying;
     }
-    get isDisabled() {
+    isDisabled() {
         return this._isDisabled;
     }
-
-    // set pivot(value) {
-
-    // }
 
     createDom(id) {
         const element = document.createElement('div');
@@ -73,22 +62,14 @@ export default class GameObject {
     }
 
     setSprite(config = {}) {
-        this._sprite = new Sprite(this.transform.position, config);
+        this._sprite = new Sprite(this._transform.getPosition(), config);
         this._sprite.appendDom();
     }
-
-    _setCollider(collider) {
-        this._collider = collider;
-    }
-
-    _setBoundingBox(dimensions) {
-        // this._boundingBox = new BoundingBox(this.transform.position, dimensions);
-    }
         
-    // addChild(gameObject) {
-    //     this._children.push(gameObject);
-    //     console.log(this);
-    // }
+    setParent(gameObject) {
+        this._transform.setParent(gameObject.getTransform());
+        console.log(this._transform);
+    }
 
     /**
      * Sets the visibility of the object. Setting to false
@@ -143,7 +124,7 @@ export default class GameObject {
      * Calls onUpdate() on all components on this GameObject
      */
     onUpdate(timestep) {
-        if(this.isDisabled || this.isDestroying) {
+        if(this._isDisabled || this._isDestroying) {
             return;
         }
         this._components.forEach(c => c.onUpdate(timestep));
@@ -153,15 +134,15 @@ export default class GameObject {
      * Renders the object in world space each game loop frame
      */
     render() {
-        if(!this._isVisible || this._isDisabled || this.isDestroying) {
+        if(!this._isVisible || this._isDisabled || this._isDestroying) {
             return;
         }
 
-        const position = this.transform.position;
+        const position = this._transform.getPosition();
 
         // the Transform stores our world-space coordinates,
         // but we need to render the object in screen-space
-        const cameraPos = Camera.transform.position;
+        const cameraPos = Camera.transform.getPosition();
         const screenSpacePos = new Vector(
             position.x - cameraPos.x,
             position.y - cameraPos.y
@@ -171,7 +152,7 @@ export default class GameObject {
         this._element.style.top  = screenSpacePos.y;
 
         if(this._sprite) {
-            this._sprite.render(screenSpacePos);
+            this._sprite.render(screenSpacePos, 1);
         }
     }
 }
