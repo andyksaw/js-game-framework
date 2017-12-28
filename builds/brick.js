@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,9 +86,9 @@ Object.defineProperty(exports, "Maths", {
   }
 });
 
-var _Vector = _interopRequireDefault(__webpack_require__(7));
+var _Vector = _interopRequireDefault(__webpack_require__(8));
 
-var _Maths = _interopRequireDefault(__webpack_require__(29));
+var _Maths = _interopRequireDefault(__webpack_require__(9));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -101,6 +101,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 Object.defineProperty(exports, "__esModule", {
   value: true
+});
+Object.defineProperty(exports, "BoundingBox", {
+  enumerable: true,
+  get: function get() {
+    return _BoundingBox.default;
+  }
 });
 Object.defineProperty(exports, "Component", {
   enumerable: true,
@@ -132,16 +138,26 @@ Object.defineProperty(exports, "Transform", {
     return _Transform.default;
   }
 });
+Object.defineProperty(exports, "addColliderTo", {
+  enumerable: true,
+  get: function get() {
+    return _Collider.addColliderTo;
+  }
+});
 
-var _Component = _interopRequireDefault(__webpack_require__(8));
+var _BoundingBox = _interopRequireDefault(__webpack_require__(26));
 
-var _GameObject = _interopRequireDefault(__webpack_require__(9));
+var _Component = _interopRequireDefault(__webpack_require__(6));
 
-var _SceneGraph = _interopRequireDefault(__webpack_require__(25));
+var _GameObject = _interopRequireDefault(__webpack_require__(7));
+
+var _SceneGraph = _interopRequireDefault(__webpack_require__(13));
 
 var _Sprite = _interopRequireDefault(__webpack_require__(14));
 
 var _Transform = _interopRequireDefault(__webpack_require__(15));
+
+var _Collider = __webpack_require__(27);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -370,138 +386,7 @@ function bootGameLoop(onStart) {
 }
 
 /***/ }),
-/* 6 */,
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _maths = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-/**
- * Represents a coordinate in 2D space
- */
-var Vector =
-/*#__PURE__*/
-function () {
-  function Vector(x, y) {
-    _classCallCheck(this, Vector);
-
-    this._x = x || 0;
-    this._y = y || 0;
-  }
-  /**
-   *  Returns the x-coordinate
-   * 
-   *  @return {number}
-   */
-
-
-  _createClass(Vector, [{
-    key: "add",
-    value: function add(vector) {
-      return new Vector(this.x + vector.x, this.y + vector.y);
-    }
-  }, {
-    key: "subtract",
-    value: function subtract(vector) {
-      return new Vector(this.x - vector.x, this.y - vector.y);
-    }
-  }, {
-    key: "multiply",
-    value: function multiply(scalar) {
-      return new Vector(this.x * scalar, this.y * scalar);
-    }
-  }, {
-    key: "clamp",
-    value: function clamp(min, max) {
-      return new Vector(_maths.Maths.clamp(this.x, min.x, max.x), _maths.Maths.clamp(this.y, min.y, max.y));
-    }
-  }, {
-    key: "x",
-    get: function get() {
-      return this._x;
-    },
-    set: function set(value) {
-      this._x = value;
-    }
-    /**
-     *  Returns the y-coordinate
-     * 
-     *  @return {number}
-     */
-
-  }, {
-    key: "y",
-    get: function get() {
-      return this._y;
-    },
-    set: function set(value) {
-      this._y = value;
-    }
-    /**
-     *  Returns the magnitude (ie. length) of the vector
-     * 
-     *  @return {number}
-     */
-
-  }, {
-    key: "magnitude",
-    get: function get() {
-      var x2 = this._x * this._x;
-      var y2 = this._y * this._y;
-      return Math.sqrt(x2 + y2);
-    }
-    /**
-     * Gets a vector that is perpendicular to this vector
-     */
-
-  }, {
-    key: "normal",
-    get: function get() {
-      return new Vector(-this.y, this.x);
-    }
-  }], [{
-    key: "origin",
-    value: function origin() {
-      return new Vector(0, 0);
-    }
-    /**
-     * Returns a scalar that shows how much vector1
-     * is in vector2's direction
-     * 
-     * @param {*} vector1 
-     * @param {*} vector2 
-     * 
-     * @return {number}
-     */
-
-  }, {
-    key: "dot",
-    value: function dot(vector1, vector2) {
-      return vector1.x * vector2.x + vector1.y * vector2.y;
-    }
-  }]);
-
-  return Vector;
-}();
-
-exports.default = Vector;
-
-/***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -596,7 +481,7 @@ function () {
 exports.default = Component;
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -913,6 +798,191 @@ function () {
 exports.default = GameObject;
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _maths = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * Represents a coordinate in 2D space
+ */
+var Vector =
+/*#__PURE__*/
+function () {
+  function Vector(x, y) {
+    _classCallCheck(this, Vector);
+
+    this._x = x || 0;
+    this._y = y || 0;
+  }
+  /**
+   *  Returns the x-coordinate
+   * 
+   *  @return {number}
+   */
+
+
+  _createClass(Vector, [{
+    key: "add",
+    value: function add(vector) {
+      return new Vector(this.x + vector.x, this.y + vector.y);
+    }
+  }, {
+    key: "subtract",
+    value: function subtract(vector) {
+      return new Vector(this.x - vector.x, this.y - vector.y);
+    }
+  }, {
+    key: "multiply",
+    value: function multiply(scalar) {
+      return new Vector(this.x * scalar, this.y * scalar);
+    }
+  }, {
+    key: "clamp",
+    value: function clamp(min, max) {
+      return new Vector(_maths.Maths.clamp(this.x, min.x, max.x), _maths.Maths.clamp(this.y, min.y, max.y));
+    }
+    /**
+     * Returns a scalar that shows how much vector1
+     * is in vector2's direction
+     * 
+     * @param {*} vector1 
+     * @param {*} vector2 
+     * 
+     * @return {number}
+     */
+
+  }, {
+    key: "x",
+    get: function get() {
+      return this._x;
+    },
+    set: function set(value) {
+      this._x = value;
+    }
+    /**
+     *  Returns the y-coordinate
+     * 
+     *  @return {number}
+     */
+
+  }, {
+    key: "y",
+    get: function get() {
+      return this._y;
+    },
+    set: function set(value) {
+      this._y = value;
+    }
+    /**
+     *  Returns the magnitude (ie. length) of the vector
+     * 
+     *  @return {number}
+     */
+
+  }, {
+    key: "magnitude",
+    get: function get() {
+      var x2 = this._x * this._x;
+      var y2 = this._y * this._y;
+      return Math.sqrt(x2 + y2);
+    }
+    /**
+     * Gets a vector that is perpendicular to this vector
+     */
+
+  }, {
+    key: "normal",
+    get: function get() {
+      return new Vector(-this.y, this.x);
+    }
+    /**
+     * Convenience direction getters
+     */
+
+  }], [{
+    key: "dot",
+    value: function dot(vector1, vector2) {
+      return vector1.x * vector2.x + vector1.y * vector2.y;
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return new Vector(-1, 0);
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return new Vector(1, 0);
+    }
+  }, {
+    key: "up",
+    get: function get() {
+      return new Vector(0, 1);
+    }
+  }, {
+    key: "down",
+    get: function get() {
+      return new Vector(0, -1);
+    }
+  }, {
+    key: "origin",
+    get: function get() {
+      return new Vector(0, 0);
+    }
+  }]);
+
+  return Vector;
+}();
+
+exports.default = Vector;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Maths = function Maths() {
+  _classCallCheck(this, Maths);
+};
+
+exports.default = Maths;
+
+Maths.random = function (min, max) {
+  var value = Math.random() * (min - max) - min;
+  return Math.round(value);
+};
+
+Maths.clamp = function (value, min, max) {
+  if (value <= min) return min;
+  if (value >= max) return max;
+  return value;
+};
+
+/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1115,7 +1185,135 @@ var _default = new Viewport();
 exports.default = _default;
 
 /***/ }),
-/* 13 */,
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _maths = __webpack_require__(0);
+
+var _objects = __webpack_require__(1);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * Singleton to hold all references to all instantiated GameObjects
+ */
+var SceneGraph =
+/*#__PURE__*/
+function () {
+  function SceneGraph() {
+    _classCallCheck(this, SceneGraph);
+
+    // an ordered list (array) of all GameObjects
+    this._hierarchy = []; // a unique id to GameObject mapping
+
+    this._gameObjects = new Map();
+  }
+
+  _createClass(SceneGraph, [{
+    key: "get",
+
+    /**
+     * Gets the GameObject that belongs to the given id
+     * 
+     * @param {*} id 
+     */
+    value: function get(id) {
+      return this._gameObjects.get(id);
+    }
+    /**
+    * Creates a new GameObject
+    * 
+    * @type {string} id         Name/identifier of the object
+    * @type {object} config     GameObject settings
+    */
+
+  }, {
+    key: "instantiate",
+    value: function instantiate(id, config) {
+      var _config$position = config.position,
+          position = _config$position === void 0 ? new _maths.Vector(0, 0) : _config$position,
+          _config$components = config.components,
+          components = _config$components === void 0 ? [] : _config$components,
+          _config$sprite = config.sprite,
+          sprite = _config$sprite === void 0 ? {} : _config$sprite,
+          _config$order = config.order,
+          order = _config$order === void 0 ? 0 : _config$order,
+          _config$collider = config.collider,
+          collider = _config$collider === void 0 ? null : _config$collider;
+
+      if (id == null) {
+        throw new Error("Instantiation failed: no unique id given for ".concat(type(gameObject)));
+      }
+
+      if (this._gameObjects.get(id)) {
+        throw new Error("Instantiation failed: a GameObject already exists with the name ".concat(id));
+      }
+
+      var obj = new _objects.GameObject(id, position);
+
+      if (collider) {}
+
+      this._hierarchy.push(obj);
+
+      this._gameObjects.set(id, obj);
+
+      if (sprite.assets) {
+        obj.setSprite(sprite);
+      }
+
+      components.forEach(function (componentName) {
+        var component = new componentName(obj);
+        obj.addComponent(component);
+      });
+      obj.createDom(id, order);
+      return obj;
+    }
+    /**
+     * Takes in an array of GameObjects and removes them all 
+     * from the hierarchy immediately
+     * 
+     * @param {array} gameObjects 
+     */
+
+  }, {
+    key: "removeBatch",
+    value: function removeBatch(gameObjects) {
+      var _this = this;
+
+      gameObjects.forEach(function (obj) {
+        _this._gameObjects.delete(obj.id);
+      });
+      this._hierarchy = this._hierarchy.filter(function (obj) {
+        return gameObjects.indexOf(obj) < 0;
+      });
+    }
+  }, {
+    key: "hierarchy",
+    get: function get() {
+      return this._hierarchy;
+    }
+  }]);
+
+  return SceneGraph;
+}();
+
+var _default = new SceneGraph();
+
+exports.default = _default;
+
+/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1264,7 +1462,7 @@ var Transform =
 /*#__PURE__*/
 function () {
   function Transform() {
-    var position = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _maths.Vector.origin();
+    var position = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _maths.Vector.origin;
     var rotation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
     var scale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
 
@@ -1273,7 +1471,7 @@ function () {
     this._position = position;
     this._parent = null;
     this._children = [];
-    this._localPosition = _maths.Vector.origin();
+    this._localPosition = _maths.Vector.origin;
     this._rotation = rotation;
     this._scale = scale;
     this._isDirty = true; // does the transform need re-rendering?
@@ -1563,7 +1761,7 @@ Object.defineProperty(exports, "Collidable", {
   }
 });
 
-var _Collidable = _interopRequireDefault(__webpack_require__(32));
+var _Collidable = _interopRequireDefault(__webpack_require__(18));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1574,13 +1772,86 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Collidable =
+/*#__PURE__*/
+function () {
+  function Collidable() {
+    _classCallCheck(this, Collidable);
+  }
+
+  _createClass(Collidable, [{
+    key: "getType",
+
+    /**
+     * Returns the type of collidable that should be checked
+     */
+    value: function getType() {
+      throw new Error('getType() not implemented');
+    }
+  }, {
+    key: "getRectangle",
+    value: function getRectangle() {
+      throw new Error('getRectangle() not implemented');
+    }
+  }, {
+    key: "getCircle",
+    value: function getCircle() {
+      throw new Error('getCircle() not implemented');
+    }
+    /**
+     * Returns whether the given collidable is currently colliding
+     * with the current collidable.
+     * 
+     * @param {Collidable} collidable 
+     * 
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "collidesWith",
+    value: function collidesWith(collidable) {}
+  }], [{
+    key: "SHAPE_BOX",
+    get: function get() {
+      return 1;
+    }
+  }, {
+    key: "SHAPE_CIRCLE",
+    get: function get() {
+      return 2;
+    }
+  }]);
+
+  return Collidable;
+}();
+
+exports.default = Collidable;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _game = __webpack_require__(4);
 
-var _block = __webpack_require__(19);
+var _block = __webpack_require__(20);
 
-var _bat = __webpack_require__(20);
+var _bat = __webpack_require__(21);
 
-var _ball = __webpack_require__(21);
+var _ball = __webpack_require__(22);
 
 var _objects = __webpack_require__(1);
 
@@ -1659,7 +1930,7 @@ var game = new BrickGame();
 game.initialise();
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1717,7 +1988,7 @@ function (_GameObject) {
 exports.Block = Block;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1812,7 +2083,7 @@ function (_GameObject) {
 exports.Bat = Bat;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1829,7 +2100,7 @@ var _maths = __webpack_require__(0);
 
 var _input = __webpack_require__(3);
 
-var _utility = __webpack_require__(22);
+var _utility = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"engine/utility/utility\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 var _screen = __webpack_require__(2);
 
@@ -1890,28 +2161,10 @@ function (_GameObject) {
 exports.Ball = Ball;
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.random = void 0;
-
-var random = function random(min, max) {
-  var value = Math.random() * (min - max) - min;
-  return Math.round(value);
-};
-
-exports.random = random;
-
-/***/ }),
 /* 23 */,
 /* 24 */,
-/* 25 */
+/* 25 */,
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1921,10 +2174,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
-var _maths = __webpack_require__(0);
-
-var _objects = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1933,216 +2182,57 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /**
- * Singleton to hold all references to all instantiated GameObjects
+ * Represents a rectangle in world-space
  */
-var SceneGraph =
+var BoundingBox =
 /*#__PURE__*/
 function () {
-  function SceneGraph() {
-    _classCallCheck(this, SceneGraph);
+  function BoundingBox(origin, offset, dimensions) {
+    _classCallCheck(this, BoundingBox);
 
-    // an ordered list (array) of all GameObjects
-    this._hierarchy = []; // a unique id to GameObject mapping
-
-    this._gameObjects = new Map();
+    this._origin = origin;
+    this._offset = offset;
+    this._dimensions = dimensions;
   }
 
-  _createClass(SceneGraph, [{
-    key: "get",
-
-    /**
-     * Gets the GameObject that belongs to the given id
-     * 
-     * @param {*} id 
-     */
-    value: function get(id) {
-      return this._gameObjects.get(id);
-    }
-    /**
-    * Creates a new GameObject
-    * 
-    * @type {string} id         Name/identifier of the object
-    * @type {object} config     GameObject settings
-    */
-
-  }, {
-    key: "instantiate",
-    value: function instantiate(id, config) {
-      var _config$position = config.position,
-          position = _config$position === void 0 ? new _maths.Vector(0, 0) : _config$position,
-          _config$components = config.components,
-          components = _config$components === void 0 ? [] : _config$components,
-          _config$sprite = config.sprite,
-          sprite = _config$sprite === void 0 ? {} : _config$sprite,
-          _config$order = config.order,
-          order = _config$order === void 0 ? 0 : _config$order;
-
-      if (id == null) {
-        throw new Error("Instantiation failed: no unique id given for ".concat(type(gameObject)));
-      }
-
-      if (this._gameObjects.get(id)) {
-        throw new Error("Instantiation failed: a GameObject already exists with the name ".concat(id));
-      }
-
-      var obj = new _objects.GameObject(id, position);
-
-      this._hierarchy.push(obj);
-
-      this._gameObjects.set(id, obj);
-
-      if (sprite.assets) {
-        obj.setSprite(sprite);
-      }
-
-      components.forEach(function (componentName) {
-        var component = new componentName(obj);
-        obj.addComponent(component);
-      });
-      obj.createDom(id, order);
-      return obj;
-    }
-    /**
-     * Takes in an array of GameObjects and removes them all 
-     * from the hierarchy immediately
-     * 
-     * @param {array} gameObjects 
-     */
-
-  }, {
-    key: "removeBatch",
-    value: function removeBatch(gameObjects) {
-      var _this = this;
-
-      gameObjects.forEach(function (obj) {
-        _this._gameObjects.delete(obj.id);
-      });
-      this._hierarchy = this._hierarchy.filter(function (obj) {
-        return gameObjects.indexOf(obj) < 0;
-      });
-    }
-  }, {
-    key: "hierarchy",
+  _createClass(BoundingBox, [{
+    key: "position",
     get: function get() {
-      return this._hierarchy;
+      return this._origin.add(this._offset);
+    }
+  }, {
+    key: "left",
+    get: function get() {
+      return this.position.x - this._dimensions.x / 2;
+    }
+  }, {
+    key: "right",
+    get: function get() {
+      return this.position.x + this._dimensions.x / 2;
+    }
+  }, {
+    key: "top",
+    get: function get() {
+      return this.position.y + this._dimensions.y / 2;
+    }
+  }, {
+    key: "bottom",
+    get: function get() {
+      return this.position.y - this._dimensions.y / 2;
     }
   }]);
 
-  return SceneGraph;
+  return BoundingBox;
 }();
 
-var _default = new SceneGraph();
-
-exports.default = _default;
+exports.default = BoundingBox;
 
 /***/ }),
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 27 */
+/***/ (function(module, exports) {
 
 "use strict";
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Maths = function Maths() {
-  _classCallCheck(this, Maths);
-};
-
-exports.default = Maths;
-
-Maths.random = function (min, max) {
-  var value = Math.random() * (min - max) - min;
-  return Math.round(value);
-};
-
-Maths.clamp = function (value, min, max) {
-  if (value <= min) return min;
-  if (value >= max) return max;
-  return value;
-};
-
-/***/ }),
-/* 30 */,
-/* 31 */,
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Collidable =
-/*#__PURE__*/
-function () {
-  function Collidable() {
-    _classCallCheck(this, Collidable);
-  }
-
-  _createClass(Collidable, [{
-    key: "getType",
-
-    /**
-     * Returns the type of collidable that should be checked
-     */
-    value: function getType() {
-      throw new Error('getType() not implemented');
-    }
-  }, {
-    key: "getRectangle",
-    value: function getRectangle() {
-      throw new Error('getRectangle() not implemented');
-    }
-  }, {
-    key: "getCircle",
-    value: function getCircle() {
-      throw new Error('getCircle() not implemented');
-    }
-    /**
-     * Returns whether the given collidable is currently colliding
-     * with the current collidable.
-     * 
-     * @param {Collidable} collidable 
-     * 
-     * @returns {boolean}
-     */
-
-  }, {
-    key: "collidesWith",
-    value: function collidesWith(collidable) {}
-  }], [{
-    key: "SHAPE_BOX",
-    get: function get() {
-      return 1;
-    }
-  }, {
-    key: "SHAPE_CIRCLE",
-    get: function get() {
-      return 2;
-    }
-  }]);
-
-  return Collidable;
-}();
-
-exports.default = Collidable;
 
 /***/ })
 /******/ ]);

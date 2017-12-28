@@ -51,6 +51,25 @@ export default class Vector {
         return new Vector(-this.y, this.x);
     }
 
+    /**
+     * Convenience direction getters
+     */
+    static get left() {
+        return new Vector(-1, 0);
+    }
+    static get right() {
+        return new Vector(1, 0);
+    }
+    static get up() {
+        return new Vector(0, 1);
+    }
+    static get down() {
+        return new Vector(0, -1);
+    }
+    static get origin() {
+        return new Vector(0, 0);
+    }
+
     add(vector) {
         return new Vector(
             this.x + vector.x,
@@ -77,10 +96,6 @@ export default class Vector {
             Maths.clamp(this.x, min.x, max.x),
             Maths.clamp(this.y, min.y, max.y)
         );
-    }
-
-    static origin() {
-        return new Vector(0, 0);
     }
 
     /**

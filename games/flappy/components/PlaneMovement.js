@@ -6,32 +6,26 @@ import { Maths } from 'engine/library/maths';
 
 export class PlaneMovement extends Component {
     onInstantiate() {
-        this._velocity = Vector.origin();
+        this._velocity = Vector.origin;
     }
 
     onUpdate(timestep) {
-        const gravity = new Vector(0, -1);
-        this._velocity = this._velocity.add(gravity);
+        const transform = this.gameObject.getTransform();
+        let pos = transform.getPosition();
 
-        // take in keyboard input
-        if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
-            this._velocity = new Vector(this._velocity.x, 10);
-        }
         if(Keyboard.getKeyPress(Keyboard.D)) {
-            this._velocity = this._velocity.add(new Vector(1, 0));
+            pos = pos.add(new Vector(4, 0));
         }
         if(Keyboard.getKeyPress(Keyboard.A)) {
-            this._velocity = this._velocity.add(new Vector(-1, 0));
+            pos = pos.add(new Vector(-4, 0));
         }
-
-        // set max speeds
-        this._velocity.x = Maths.clamp(this._velocity.x, -3.5, 3.5);
-        this._velocity.y = Math.max(this._velocity.y, -10);
-
-        this._velocity = this._velocity.multiply(timestep);
-
-        const transform = this.gameObject.getTransform();
-        const newPos = transform.getPosition().add(this._velocity);
-        transform.setPosition(newPos);
+        if(Keyboard.getKeyPress(Keyboard.W)) {
+            pos = pos.add(new Vector(0, 4));
+        }
+        if(Keyboard.getKeyPress(Keyboard.S)) {
+            pos = pos.add(new Vector(0, -4));
+        }
+        
+        transform.setPosition(pos);
     }
 }

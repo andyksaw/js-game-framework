@@ -1,11 +1,11 @@
 import { Vector } from 'engine/library/maths';
 
 export default class Transform {
-    constructor(position = Vector.origin(), rotation = 0, scale = 1) {
+    constructor(position = Vector.origin, rotation = 0, scale = 1) {
         this._position = position;
         this._parent = null;
         this._children = [];
-        this._localPosition = Vector.origin();
+        this._localPosition = Vector.origin;
         this._rotation = rotation;
         this._scale = scale;
 

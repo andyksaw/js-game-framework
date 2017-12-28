@@ -45,9 +45,9 @@ export class SceneManager extends Component {
     }
 
     onUpdate(timestep) {
-        let cameraPos = Camera.transform.getPosition().add(this._scrollSpeed);
+        // let cameraPos = Camera.transform.getPosition().add(this._scrollSpeed);
         // cameraPos = cameraPos.multiply(timestep);
 
-        Camera.transform.setPosition(cameraPos);
+        // Camera.transform.setPosition(cameraPos);
     }
 }

@@ -1,28 +1,14 @@
 import { Collidable } from 'engine/library/collisions';
+import { BoundingBox } from 'engine/library/objects';
 
 export default class BoxCollider extends Collidable {
-    constructor(origin, offset, dimensions) {
-        this._origin = origin;
-        this._offset = offset;
-        this._dimensions = dimensions;
+    constructor(boundingBox) {
+        this._boundingBox = boundingBox;
     }
 
-    get position() {
-        return this._origin.add(this._offset);
+    get boundingBox() {
+        return this._boundingBox;
     }
-    get left() {
-        return this.position.x - (this._dimensions.x / 2);
-    }
-    get right() {
-        return this.position.x + (this._dimensions.x / 2);
-    }
-    get top() {
-        return this.position.y + (this._dimensions.y / 2);
-    }
-    get bottom() {
-        return this.position.y - (this._dimensions.y / 2);
-    }
-
 
     getType() {
         return Collidable.SHAPE_BOX;
@@ -30,10 +16,10 @@ export default class BoxCollider extends Collidable {
 
     getRect() {
         return {
-            left: this.left,
-            right: this.right,
-            top: this.top,
-            bottom: this.bottom,
+            left    : this._boundingBox.left,
+            right   : this._boundingBox.right,
+            top     : this._boundingBox.top,
+            bottom  : this._boundingBox.bottom,
         };
     }
 
@@ -54,10 +40,10 @@ export default class BoxCollider extends Collidable {
      */
     rectToRectCheck(rect) {
         return (
-            rect.right > this.left ||
-            rect.left < this.right ||
-            rect.top > this.bottom ||
-            rect.bottom < this.top
+            rect.right  > this._boundingBox.left ||
+            rect.left   < this._boundingBox.right ||
+            rect.top    > this._boundingBox.bottom ||
+            rect.bottom < this._boundingBox.top
         );
     }
 

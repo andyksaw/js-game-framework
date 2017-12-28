@@ -5,7 +5,7 @@ import { SceneManager } from 'games/flappy/components/SceneManager';
 import { SceneGraph, Sprite } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Viewport, Canvas, Camera } from 'engine/library/screen';
-import { BoxCollider } from 'engine/library/collisions';
+import { BoxCollider } from 'engine/library/collisions/colliders';
 
 class FlappyGame extends Game {
     onStart() {

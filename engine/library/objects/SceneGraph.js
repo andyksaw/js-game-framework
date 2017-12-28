@@ -38,6 +38,7 @@ class SceneGraph {
             components = [],
             sprite = {},
             order = 0,
+            collider = null,
         } = config;
 
         if(id == null) {
@@ -47,7 +48,11 @@ class SceneGraph {
             throw new Error(`Instantiation failed: a GameObject already exists with the name ${id}`)
         }
 
-        const obj = new GameObject(id, position);
+        let obj = new GameObject(id, position);
+        if(collider) {
+            
+        }
+
         this._hierarchy.push(obj);
         this._gameObjects.set(id, obj);
 
