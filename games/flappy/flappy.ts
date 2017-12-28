@@ -1,6 +1,6 @@
 import { Game } from 'engine/game';
-import { PlaneMovement } from 'games/flappy/components/PlaneMovement';
-import { SceneManager } from 'games/flappy/components/SceneManager';
+import { PlaneMovement } from './components/PlaneMovement';
+import { SceneManager } from './components/SceneManager';
 
 import { SceneGraph, Sprite } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
@@ -9,8 +9,6 @@ import { BoxCollider } from 'engine/library/collisions/colliders';
 
 class FlappyGame extends Game {
     onStart() {
-        Camera.transform.position = new Vector(15, 0);
-        
         const sceneManager = SceneGraph.instantiate('sceneManager', {
             components: [
                 SceneManager,

@@ -1,7 +1,7 @@
 import { GameObject } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Keyboard } from 'engine/library/input';
-import { random } from 'engine/utility/utility';
+import { Maths } from 'engine/library/maths';
 import { Viewport } from 'engine/library/screen';
 
 export class Ball extends GameObject {
@@ -13,7 +13,7 @@ export class Ball extends GameObject {
     }
 
     onInstantiate() {
-        this._velocity = new Vector(random(-4, 4), 4);
+        this._velocity = new Vector(Maths.random(-4, 4), 4);
     }
 
     onUpdate(timestep) {

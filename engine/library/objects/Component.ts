@@ -1,3 +1,5 @@
+import { GameObject, Transform, Sprite } from "engine/library/objects";
+
 /**
  * An interface for interacting with a GameObject. This is
  * where almost all the custom game code should live.
@@ -5,8 +7,13 @@
  * A component should be instantiated and attached to a
  * GameObject when the GameObject is created.
  */
-export default class Component {
-    constructor(gameObject) {
+export default abstract class Component {
+    /**
+     * The GameObject this component belongs to
+     */
+    private _gameObject: GameObject;
+
+    constructor(gameObject: GameObject) {
         this._gameObject = gameObject;
     }
     
@@ -15,8 +22,8 @@ export default class Component {
      * 
      * @return {Transform}
      */
-    get transform() {
-        return this._gameObject.transform;
+    get transform() : Transform {
+        return this._gameObject.getTransform();
     }
 
     /**
@@ -24,8 +31,8 @@ export default class Component {
      * 
      * @return {Sprite}
      */
-    get sprite() {
-        return this._gameObject.sprite;
+    get sprite() : Sprite {
+        return this._gameObject.getSprite();
     }
 
     /**
@@ -33,22 +40,22 @@ export default class Component {
      * 
      * @return {GameObject}
      */
-    get gameObject() {
+    get gameObject() : GameObject {
         return this._gameObject;
     }
 
     /**
      * Logic to run when the object is first instantiated.
      */
-    onInstantiate() {}
+    protected onInstantiate() : void {}
     
     /**
      * Logic to run every game loop frame
      */
-    onUpdate() {}
+    protected onUpdate(timestep: number) : void {}
 
     /**
      * Logic to run when the object is destroyed
      */
-    onDestroy() {}
+    protected onDestroy() : void {}
 }

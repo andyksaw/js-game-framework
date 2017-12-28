@@ -5,11 +5,13 @@ import { Viewport } from 'engine/library/screen';
 import { Maths } from 'engine/library/maths';
 
 export class PlaneMovement extends Component {
-    onInstantiate() {
-        this._velocity = Vector.origin;
+    private _velocity: Vector = Vector.origin;
+
+    protected onInstantiate() : void {
+        
     }
 
-    onUpdate(timestep) {
+    protected onUpdate(timestep: number) : void {
         const transform = this.gameObject.getTransform();
         let pos = transform.getPosition();
 

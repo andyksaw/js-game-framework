@@ -3,11 +3,12 @@ var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
     entry: {
-        brick:  'games/brick/brick.js',
-        flappy: 'games/flappy/flappy.js',
+        // brick:  'games/brick/brick.ts',
+        flappy: './games/flappy/flappy.ts',
     },
+    devtool: 'inline-source-map',
     output: {
-        path: path.resolve(__dirname, 'builds'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
     },
     resolve: {
@@ -15,6 +16,7 @@ module.exports = {
             engine: path.resolve(__dirname, 'engine/'),
             games: path.resolve(__dirname, 'games/'),
         },
+        extensions: [ '.tsx', '.ts', '.js' ],
     },
     plugins: [
         new BrowserSyncPlugin({
@@ -26,15 +28,10 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                    presets: ['@babel/preset-env']
-                    }
-                }
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
             }
-        ]
+        ],
     }
 }

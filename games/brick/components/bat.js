@@ -4,7 +4,9 @@ import { Keyboard } from 'engine/library/input';
 import { Viewport } from 'engine/library/screen';
 
 export class Bat extends GameObject {
-    _boxDirection = 1;
+    onInstantiate() {
+        this._boxDirection = 1;
+    }
     
     getElementDom() {
         const element = document.createElement('div');

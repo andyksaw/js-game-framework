@@ -1,10 +1,14 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
+        "outDir": "./builds/",
+        "sourceMap": true,
         "noImplicitAny": true,
         "module": "es6",
-        "target": "es5",
-        // "jsx": "react",
+        "target": "es6",
+        "jsx": "react",
+        "baseUrl": "./",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
         "allowJs": true
     }
 }
