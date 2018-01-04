@@ -2,6 +2,7 @@ import { GameObject, Component, SceneGraph, BoundingBox } from 'engine/library/o
 import { Vector } from 'engine/library/maths';
 import { Keyboard } from 'engine/library/input';
 import { Viewport, Camera } from 'engine/library/screen';
+import BoxCollider from 'engine/library/collisions/colliders/BoxCollider';
 
 export class SceneManager extends Component {
     private _rockList: Array<GameObject> = [];
@@ -36,6 +37,12 @@ export class SceneManager extends Component {
                     new Vector(108, 239),
                 ),
             },
+            collider: new BoxCollider(
+                new BoundingBox(
+                    new Vector(350, -Viewport.instance.height + 239),
+                    new Vector(108, 239),
+                ),
+            ),
         });
 
         for(let i = 0; i < 2; i++) {

@@ -12,10 +12,11 @@
   "devDependencies": {
     "browser-sync": "^2.19.0",
     "browser-sync-webpack-plugin": "^1.2.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
     "ts-loader": "^3.2.0",
-    "typescript": "^2.6.2"
-  },
-  "dependencies": {
+    "typescript": "^2.6.2",
     "webpack": "^3.10.0"
-  }
+  },
+  "dependencies": {}
 }

@@ -194,7 +194,7 @@ export default class GameObject implements Colliderable {
     }
 
     public onCollision(collidingObjs: Collider[]) : void {
-
+        // console.log(`${this._id} is colliding with`, collidingObjs);
     }
 
     /**

@@ -1,20 +1,21 @@
 import { Collider, ColliderShape, Box, Circle } from 'engine/library/collisions';
 import { BoundingBox } from 'engine/library/objects';
+import { Vector } from 'engine/library/maths';
 
 export default class BoxCollider extends Collider {
     constructor(private _boundingBox: BoundingBox) {
         super();
     }
 
-    get boundingBox() : BoundingBox {
+    public get boundingBox() : BoundingBox {
         return this._boundingBox;
     }
 
-    getType() : ColliderShape {
+    public getType() : ColliderShape {
         return ColliderShape.BOX;
     }
 
-    getRect() : Box {
+    public getRectangle() : Box {
         return {
             left    : this._boundingBox.left,
             right   : this._boundingBox.right,
@@ -23,7 +24,7 @@ export default class BoxCollider extends Collider {
         };
     }
 
-    collidesWith(collider: Collider) : boolean {
+    public collidesWith(collider: Collider) : boolean {
         switch(collider.getType()) {
             case ColliderShape.BOX:
                 return this.rectToRectCheck(collider.getRectangle());
@@ -35,12 +36,16 @@ export default class BoxCollider extends Collider {
         return false;
     }
     
+    public setPosition(position: Vector) : void {
+        this._boundingBox.setOrigin(position);
+    }
+
     /**
      * Performs a collision detection against another rectangle
      * 
      * @param {} rect 
      */
-    rectToRectCheck(rect: Box) {
+    private rectToRectCheck(rect: Box) {
         return (
             rect.right  > this._boundingBox.left ||
             rect.left   < this._boundingBox.right ||
@@ -49,7 +54,7 @@ export default class BoxCollider extends Collider {
         );
     }
 
-    rectToCircleCheck(circle: Circle) {
+    private rectToCircleCheck(circle: Circle) {
         // return (
 
         // );

@@ -1,9 +1,11 @@
-import { SceneGraph } from "engine/library/objects";
+import { SceneGraph, Transform } from "engine/library/objects";
 import { Collider } from "engine/library/collisions";
+import GameObject from "engine/library/objects/GameObject";
 
-export interface Colliderable {
+export interface Colliderable extends GameObject {
     onCollision(collidingObjs: Collider[]): void;
     onUpdate(timestep: number): void;
+    getTransform(): Transform;
 }
 
 // base class must have an onUpdate lifecycle hook method since
@@ -14,13 +16,12 @@ export interface Colliderable {
 type Constructor<T = Colliderable> = new (...args: any[]) => T;
 
 export default function withCollider<T extends Constructor>(Base: T, collider: Collider) {
-    return class ColliderObject extends Base {
+    return class ColliderableGameObject extends Base {
         private _collider: Collider;
 
         public constructor(...args: any[]) {
             super(...args);
             this._collider = collider;
-            console.log('this gameobject has a collider', collider);
         }
 
         public getCollider() : Collider {
@@ -30,12 +31,23 @@ export default function withCollider<T extends Constructor>(Base: T, collider: C
         public onUpdate(timestep: number) {
             super.onUpdate(timestep);
 
+            const colliderPos = super.getTransform().getPosition();
+            this._collider.setPosition(colliderPos);
+
             // TODO: implement QuadTree so we don't have to query every
             // single GameObject in the scene...
             const nearbyGameObjects = SceneGraph.instance.colliders;
 
             const collidingObjs: Array<Collider> = [];
             nearbyGameObjects.forEach(obj => {
+                // if(
+                //     obj instanceof GameObject && 
+                //     this instanceof GameObject &&
+                //     obj.getName() === this.getName()
+                // ) {
+                //     return;
+                // }
+
                 if(this._collider.collidesWith(obj)) {
                     collidingObjs.push(obj);
                 }

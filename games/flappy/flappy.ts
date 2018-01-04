@@ -31,6 +31,12 @@ class FlappyGame extends Game {
                 ),
                 // timing: 150,
             },
+            collider: new BoxCollider(
+                new BoundingBox(
+                    new Vector(50, -50), 
+                    new Vector(50, 50)
+                ),
+            ),
             components: [
                 PlaneMovement,
             ],

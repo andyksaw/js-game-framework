@@ -1,0 +1,28 @@
+html,
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+#ui,
+#gameObjects {
+    contain: strict;
+}
+
+.gameObject {
+    background: hsl(0, 0%, 80%);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+}
+
+.sprite {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.bounds {
+    border: 1px solid green;
+}

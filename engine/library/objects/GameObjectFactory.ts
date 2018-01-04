@@ -2,6 +2,7 @@ import { Transform, Sprite, SpriteConfig, GameObject, Component } from 'engine/l
 import { Collider } from 'engine/library/collisions';
 import { Vector } from 'engine/library/maths';
 import withCollider from 'engine/library/objects/Colliderable';
+import SceneGraph from 'engine/library/objects/SceneGraph';
 
 export interface GameObjectConfig {
     position?: Vector;
@@ -35,9 +36,11 @@ export function makeGameObject(id: string, config: GameObjectConfig) : GameObjec
     // to the GameObject
     if(config.collider) {
         gameObjectType = withCollider(GameObject, config.collider);
+        SceneGraph.instance.addCollider(config.collider);
     }
     let obj = new gameObjectType(id, new Transform(config.position));
 
+    
     if(config.sprite && config.sprite.assets) {
         const spriteInstance = new Sprite(config.sprite);
         spriteInstance.appendDom();

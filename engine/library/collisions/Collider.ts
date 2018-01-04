@@ -1,4 +1,5 @@
 import { Vector } from "engine/library/maths";
+import { GameObject } from "engine/library/objects";
 
 export enum ColliderShape {
     BOX,
@@ -18,6 +19,17 @@ export interface Circle {
 }
 
 export default abstract class Collider {
+
+    private _gameObject: GameObject;
+
+    public get gameObject() {
+        return this._gameObject;
+    }
+
+    public setGameObject(gameObject: GameObject) {
+        this._gameObject = gameObject;
+    }
+
     /**
      * Returns the type of collidable that should be checked
      */
@@ -54,5 +66,12 @@ export default abstract class Collider {
      * @returns {boolean}
      */
     public abstract collidesWith(collider: Collider) : boolean;
+
+    /**
+     * Sets the current position of the Collider
+     * 
+     * @param position
+     */
+    public abstract setPosition(position: Vector) : void;
 
 }

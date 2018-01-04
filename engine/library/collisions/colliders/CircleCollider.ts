@@ -1,6 +1,5 @@
 import { Collider, ColliderShape, Box, Circle } from "engine/library/collisions";
 import { Vector } from "engine/library/maths";
-import {  } from "engine/library/collisions/Collidable";
 
 export default class CircleCollider extends Collider {
     constructor(
@@ -18,18 +17,18 @@ export default class CircleCollider extends Collider {
         return this._radius;
     }
 
-    getType() : ColliderShape {
+    public getType() : ColliderShape {
         return ColliderShape.CIRCLE;
     }
 
-    getCircle() : Circle {
+    public getCircle() : Circle {
         return {
             position: this.position,
             radius: this.radius,
         };
     }
 
-    collidesWith(collider: Collider) : boolean {
+    public collidesWith(collider: Collider) : boolean {
         switch(collider.getType()) {
             case ColliderShape.BOX:
                 return this.circleToRectCheck(collider.getRectangle());
@@ -41,11 +40,15 @@ export default class CircleCollider extends Collider {
         return false;
     }
 
-    circleToRectCheck(rect: Box) : boolean {
+    public setPosition(position: Vector) : void {
+        this._origin = position;
+    }
+
+    private circleToRectCheck(rect: Box) : boolean {
         return false;
     }
 
-    circleToCircleCheck(circle: Circle) : boolean {
+    private circleToCircleCheck(circle: Circle) : boolean {
         return false;
     }
 }
