@@ -1,40 +1,48 @@
 import { Vector } from 'engine/library/maths';
-import { BoundingBox, Transform, Sprite } from 'engine/library/objects';
+import { BoundingBox, Transform, Sprite, SpriteConfig, Component } from 'engine/library/objects';
 import { Camera } from 'engine/library/screen';
 
 /**
  * Represents an object in the scene
  */
 export default class GameObject {
+
+    private _id: string;
+    private _element: HTMLDivElement;
+    private _isVisible: boolean = true;
+    private _isDestroying: boolean = false;
+    private _isDisabled: boolean = false;
+
+    private _transform: Transform;
+    private _sprite: Sprite;
+    private _components: Array<Component> = [];
+
     /**
      * Creates a new GameObject
      * 
      * @param {string} id           Unique identifier
      * @param {Vector} position     Starting position of the object
      */
-    constructor(id, position = null) {
+    constructor(id: string, transform: Transform) {
         this._id = id;
-        this._isVisible = true;
-        this._isDestroying = false;
-        this._isDisabled = false;
-        
-        this._components = [];
-        this._sprite = null;
-        
-        this._transform = new Transform(position);
+        this._transform = transform;
+    }
+
+    get id() : string {
+        return this._id;
     }
 
     /**
      * @return {Transform}
      */
-    getTransform() {
+    public getTransform() : Transform {
         return this._transform;
     }
 
     /**
      * @return {Sprite}
      */
-    getSprite() {
+    public getSprite() : Sprite {
         return this._sprite;
     }
     
@@ -43,16 +51,16 @@ export default class GameObject {
      * 
      * @return {string}
      */
-    getName() {
+    public getName() : string {
         return this._id;
     }
 
     /**
      * Returns the DOM element that represents this GameObject
      * 
-     * @return {HTMLNode}
+     * @return {HTMLDivElement}
      */
-    getElement() {
+    public getElement() : HTMLDivElement {
         return this._element;
     }
 
@@ -62,7 +70,7 @@ export default class GameObject {
      * 
      * @return {boolean}
      */
-    isVisible() {
+    public isVisible() : boolean {
         return this._isVisible;
     }
     
@@ -71,7 +79,7 @@ export default class GameObject {
      * 
      * @return {boolean}
      */
-    isDestroying() {
+    public isDestroying() : boolean {
         return this._isDestroying;
     }
 
@@ -81,28 +89,17 @@ export default class GameObject {
      * 
      * @return {boolean}
      */
-    isDisabled() {
+    public isDisabled() : boolean {
         return this._isDisabled;
     }
 
     /**
-     * Injects this GameObject's DOM element into the document body
-     * 
-     * @param {string} id 
+     * Sets the HTML element that represents this GameObject
+     *
+     * @param element 
      */
-    createDom(id, zIndex = 0) {
-        const element = document.createElement('div');
-        element.id = id;
-        element.classList.add('gameObject');
-
-        if(zIndex !== 0) {
-            element.style.zIndex = zIndex;
-        }
-
-        document.body.appendChild(element);
+    public setElement(element: HTMLDivElement) : void {
         this._element = element;
-
-        this.onInstantiate();
     }
 
     /**
@@ -110,7 +107,7 @@ export default class GameObject {
      * 
      * @param {Component} component 
      */
-    addComponent(component) {
+    public addComponent(component: Component) : void {
         this._components.push(component);
     }
 
@@ -118,11 +115,10 @@ export default class GameObject {
      * Sets the Sprite that represents this GameObject. If no Sprite is
      * set, nothing will happen in the render cycle for this object.
      * 
-     * @param {object} config 
+     * @param {Sprite} config 
      */
-    setSprite(config = {}) {
-        this._sprite = new Sprite(this._transform.getPosition(), config);
-        this._sprite.appendDom();
+    public setSprite(sprite: Sprite) : void {
+        this._sprite = sprite;
     }
      
     /**
@@ -131,7 +127,7 @@ export default class GameObject {
      * 
      * @param {GameObject} gameObject 
      */
-    setParent(gameObject) {
+    public setParent(gameObject: this) : void {
         this._transform.setParent(gameObject.getTransform());
         gameObject.getTransform().addChild(this._transform);
     }
@@ -142,7 +138,7 @@ export default class GameObject {
      * 
      * @param {boolean} isVisible 
      */
-    setVisibility(isVisible) {
+    public setVisibility(isVisible: boolean) : void {
         if(this._isVisible != isVisible) {
             this._element.style.display = isVisible ? 'none' : 'hidden';
             this._isVisible = isVisible;
@@ -157,7 +153,7 @@ export default class GameObject {
      * 
      * @param {boolean} isDisabled 
      */
-    setDisabled(isDisabled) {
+    public setDisabled(isDisabled: boolean) : void {
         this._isDisabled = isDisabled;
         this._element.style.display = isDisabled ? 'none' : 'hidden';
     }
@@ -167,7 +163,7 @@ export default class GameObject {
      * Furthermore, the object will not execute its update loop if 
      * it hasn't already executed it yet.
      */
-    destroy() {
+    public destroy() : void {
         this._isDestroying = true;
         this.onDestroy();
     }
@@ -175,21 +171,21 @@ export default class GameObject {
     /**
      * Calls onInstantiate() on all components on this GameObject
      */
-    onInstantiate() {
+    public onInstantiate() : void {
         this._components.forEach(c => c.onInstantiate());
     }
 
     /**
      * Calls onDestroy() on all components on this GameObject
      */
-    onDestroy() {
+    public onDestroy() : void {
         this._components.forEach(c => c.onDestroy());
     }
 
     /**
      * Calls onUpdate() on all components on this GameObject
      */
-    onUpdate(timestep) {
+    public onUpdate(timestep: number) : void {
         if(this._isDisabled || this._isDestroying) {
             return;
         }
@@ -199,7 +195,7 @@ export default class GameObject {
     /**
      * Renders the object in world space each game loop frame
      */
-    render() {
+    public render() : void {
         if(!this._isVisible || this._isDisabled || this._isDestroying) {
             return;
         }
@@ -213,8 +209,8 @@ export default class GameObject {
             // but we need to render the object in screen-space
             screenSpacePos = this._getScreenPosition();
 
-            this._element.style.left = screenSpacePos.x;
-            this._element.style.top  = screenSpacePos.y;
+            this._element.style.left = screenSpacePos.x.toString();
+            this._element.style.top  = screenSpacePos.y.toString();
 
             this._transform.clean();
 
@@ -231,9 +227,9 @@ export default class GameObject {
 
     }
 
-    _getScreenPosition() {
+    private _getScreenPosition() : Vector {
         const position = this._transform.getPosition();
-        const cameraPos = Camera.transform.getPosition();
+        const cameraPos = Camera.instance.transform.getPosition();
         
         return new Vector(
             position.x - cameraPos.x,

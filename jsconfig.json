@@ -5,5 +5,10 @@
             "engine/*": ["engine/*"],
             "games/*": ["games/*"]
         }
-    }
+    },
+
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

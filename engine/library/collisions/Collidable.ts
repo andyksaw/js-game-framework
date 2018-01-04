@@ -1,20 +1,22 @@
-export default class Collidable {
-    
-    static get SHAPE_BOX() { return 1; }
-    static get SHAPE_CIRCLE() { return 2; }
+export enum ColliderShape {
+    BOX,
+    CIRCLE,
+}
+
+export default abstract class Collidable {
     /**
      * Returns the type of collidable that should be checked
      */
-    getType() {
+    public getType() : ColliderShape {
         throw new Error('getType() not implemented');
     }
 
 
-    getRectangle() {
+    public getRectangle() {
         throw new Error('getRectangle() not implemented');
     }
     
-    getCircle() {
+    public getCircle() {
         throw new Error('getCircle() not implemented');
     }
 
@@ -26,6 +28,6 @@ export default class Collidable {
      * 
      * @returns {boolean}
      */
-    collidesWith(collidable) {}
+    public abstract collidesWith(collidable: Collidable) : boolean;
 
 }

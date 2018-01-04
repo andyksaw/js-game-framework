@@ -14,7 +14,7 @@ export class Game {
      * Starts the engine game loop and the game's logic
      */
     initialise() {
-        Camera.transform.position = new Vector(0, 0);
+        Camera.instance.transform.setPosition(new Vector(0, 0));
         bootGameLoop(this.onStart);
     }
 

@@ -4,7 +4,9 @@ import { Keyboard } from 'engine/library/input';
 import { Viewport } from 'engine/library/screen';
 
 export class Bat extends GameObject {
-    _boxDirection = 1;
+    onInstantiate() {
+        this._boxDirection = 1;
+    }
     
     getElementDom() {
         const element = document.createElement('div');
@@ -35,8 +37,8 @@ export class Bat extends GameObject {
         if(this.bounds.left < 0) {
             this.position.x = this.dimensions.x / 2;
         }
-        if(this.bounds.right > Viewport.width) {
-            this.position.x = Viewport.width - this.dimensions.x / 2;
+        if(this.bounds.right > Viewport.instance.width) {
+            this.position.x = Viewport.instance.width - this.dimensions.x / 2;
         }
     }
 }
