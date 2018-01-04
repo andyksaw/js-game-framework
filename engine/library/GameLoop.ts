@@ -5,21 +5,21 @@ import { SceneGraph } from 'engine/library/objects';
  *
  * @constant {number}
  */
-const MS_PER_FRAME = 16;
+const MS_PER_FRAME: number = 16;
 
 /**
  *  Game speed (1 = normal speed | 0 = not moving)
  * 
  *  @constant {number}
  */
-const TIME_STEP = 1;
+const TIME_STEP: number = 1;
 
 /**
  *  Timestamp of the last rendered frame
  * 
  * @type {number}
  */
-let lastTick;
+let lastTick: number;
 
 
 /**
@@ -28,7 +28,7 @@ let lastTick;
  * Calculates frame stats and passes it to the update
  * and render loop
  */
-function gameLoop() {
+function gameLoop() : void {
     // calculate how much time has actually passed since
     // the last frame and pass it to the update loop
     const currentTick = Date.now();
@@ -46,8 +46,8 @@ function gameLoop() {
 /**
  *  Delegates work to every game object
  */
-function onUpdate(timestep) {
-    const hierarchy = SceneGraph.hierarchy;
+function onUpdate(timestep: number) {
+    const hierarchy = SceneGraph.instance.hierarchy;
     const corpseObjects = [];
 
     // loop over a buffer so that newly instantiated objects
@@ -66,7 +66,7 @@ function onUpdate(timestep) {
 
     // cleanup any objects marked for deletion
     if(corpseObjects.length > 0) {
-        SceneGraph.removeBatch(corpseObjects);
+        SceneGraph.instance.removeBatch(corpseObjects);
     }
 }
 
@@ -75,6 +75,7 @@ function onUpdate(timestep) {
  */
 function onRender() {
     SceneGraph
+        .instance
         .hierarchy
         .forEach(obj => obj.render());
 }
@@ -83,7 +84,7 @@ function onRender() {
  * Starts the game loop
  */
 let isBooted = false;
-export function bootGameLoop(onStart) {
+export function bootGameLoop(onStart: Function) {
     if(isBooted) {
         return;
     }

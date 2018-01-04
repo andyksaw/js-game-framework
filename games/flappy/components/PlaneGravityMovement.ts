@@ -1,28 +1,30 @@
 import { Component } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
-import { Keyboard } from 'engine/library/input';
+import { Keyboard, Key } from 'engine/library/input';
 import { Viewport } from 'engine/library/screen';
 import { Maths } from 'engine/library/maths';
 
 export class PlaneMovement extends Component {
     private _velocity: Vector = Vector.origin;
 
-    protected onInstantiate() : void {
+    public onInstantiate() : void {
 
     }
 
-    protected onUpdate(timestep: number) : void {
+    public onUpdate(timestep: number) : void {
         const gravity = new Vector(0, -1);
         this._velocity = this._velocity.add(gravity);
 
+        const keyboard = Keyboard.instance;
+
         // take in keyboard input
-        if(Keyboard.getKeyPress(Keyboard.SPACEBAR)) {
+        if(keyboard.getKeyPress(Key.SPACEBAR)) {
             this._velocity = new Vector(this._velocity.x, 10);
         }
-        if(Keyboard.getKeyPress(Keyboard.D)) {
+        if(keyboard.getKeyPress(Key.D)) {
             this._velocity = this._velocity.add(new Vector(1, 0));
         }
-        if(Keyboard.getKeyPress(Keyboard.A)) {
+        if(keyboard.getKeyPress(Key.A)) {
             this._velocity = this._velocity.add(new Vector(-1, 0));
         }
 

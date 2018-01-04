@@ -8,7 +8,7 @@ export default class Transform {
     private _localPosition: Vector = Vector.origin;
 
     private _parent: Transform = null;
-    private _children: Transform[];
+    private _children: Transform[] = [];
 
     /**
      * Whether the transform needs a redraw

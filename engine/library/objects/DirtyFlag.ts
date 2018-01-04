@@ -1,3 +1,5 @@
+import { Types } from 'engine/internal';
+
 /**
  * Adds a dirty flag to the decorated class. 
  * 
@@ -5,20 +7,26 @@
  * the decorated class needs to be redrawn in the
  * render cycle.
  */
-export default class DirtyFlag {
-    protected _isDirty: boolean = true;
+export default function withDirtyFlag<T extends Types.Constructor>(Base: T) {
+    return class DirtyFlag extends Base {
+        protected _isDirty: boolean = true;
 
-    protected clean() : void {
-        this._isDirty = false;
-    }
-    protected dirty() : void {
-        this._isDirty = true;
-    }
-    protected setDirtyFlag(isDirty: boolean) {
-        this._isDirty = isDirty;
-    }
-
-    get isDirty() {
-        return this._isDirty;
+        constructor(...args: any[]) {
+            super(...args);
+        }
+    
+        protected clean() : void {
+            this._isDirty = false;
+        }
+        protected dirty() : void {
+            this._isDirty = true;
+        }
+        protected setDirtyFlag(isDirty: boolean) {
+            this._isDirty = isDirty;
+        }
+    
+        get isDirty() {
+            return this._isDirty;
+        }
     }
 }

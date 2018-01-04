@@ -1,4 +1,4 @@
-import { GameObject, Component, SceneGraph } from 'engine/library/objects';
+import { GameObject, Component, SceneGraph, BoundingBox } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Keyboard } from 'engine/library/input';
 import { Viewport, Camera } from 'engine/library/screen';
@@ -7,36 +7,46 @@ export class SceneManager extends Component {
     private _rockList: Array<GameObject> = [];
     private _scrollSpeed: Vector = Vector.origin;
 
-    protected onInstantiate() : void {
+    public onInstantiate() : void {
+        const scene = SceneGraph.instance;
+
         for(let i = 0; i < 2; i++) {
-            SceneGraph.instantiate('backgroundSky'+i, {
+            scene.instantiate('backgroundSky'+i, {
                 position: new Vector(800 * i, 0),
                 order: -999,
                 sprite: {
                     assets: ['assets/images/background.png'],
+                    bounds: new BoundingBox(
+                        new Vector(800 * i, 0),
+                        new Vector(800, 480),
+                    ),
                     // timing: 150,
-                    dimensions: new Vector(800, 480),
-                    // offset: new Vector(0, 0),
                 },
                 components: [
                 ],
             });
         }
 
-        const rock = SceneGraph.instantiate('rock', {
-            position: new Vector(350, -Viewport.height + 239),
+        const rock = scene.instantiate('rock', {
+            position: new Vector(350, -Viewport.instance.height + 239),
             sprite: {
                 assets: ['assets/images/rockUp.png'],
-                dimensions: new Vector(108, 239),
+                bounds: new BoundingBox(
+                    new Vector(350, -Viewport.instance.height + 239),
+                    new Vector(108, 239),
+                ),
             },
         });
 
         for(let i = 0; i < 2; i++) {
-            SceneGraph.instantiate('groundBottom'+i, {
-                position: new Vector(808 * i, -Viewport.height + 71),
+            scene.instantiate('groundBottom'+i, {
+                position: new Vector(808 * i, -Viewport.instance.height + 71),
                 sprite: {
                     assets: ['assets/images/groundDirt.png'],
-                    dimensions: new Vector(808, 71),
+                    bounds: new BoundingBox(
+                        new Vector(808 * i, -Viewport.instance.height + 71),
+                        new Vector(808, 71),
+                    ),
                 },
             });
         }
@@ -44,7 +54,7 @@ export class SceneManager extends Component {
         this._scrollSpeed = new Vector(3, 0);
     }
 
-    protected onUpdate(timestep: number) : void {
+    public onUpdate(timestep: number) : void {
         // let cameraPos = Camera.transform.getPosition().add(this._scrollSpeed);
         // cameraPos = cameraPos.multiply(timestep);
 

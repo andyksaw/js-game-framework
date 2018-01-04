@@ -20,7 +20,7 @@ class BrickGame extends Game {
         const ball = SceneGraph.instantiate(Ball, {
             id: 'ball',
             dimensions: new Vector(25, 25),
-            position: Viewport.origin,
+            position: Viewport.instance.origin,
         });
 
         // Canvas.drawLine(new Vector(100, 350), new Vector(200, 350));

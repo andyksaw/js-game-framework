@@ -47,15 +47,15 @@ export default abstract class Component {
     /**
      * Logic to run when the object is first instantiated.
      */
-    protected onInstantiate() : void {}
+    public onInstantiate() : void {}
     
     /**
      * Logic to run every game loop frame
      */
-    protected onUpdate(timestep: number) : void {}
+    public onUpdate(timestep: number) : void {}
 
     /**
      * Logic to run when the object is destroyed
      */
-    protected onDestroy() : void {}
+    public onDestroy() : void {}
 }

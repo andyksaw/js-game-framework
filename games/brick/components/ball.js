@@ -21,10 +21,10 @@ export class Ball extends GameObject {
         
         this.position = this.position.add(this._velocity);
 
-        if(this.bounds.right >= Viewport.width || this.bounds.left <= 0) {
+        if(this.bounds.right >= Viewport.instance.width || this.bounds.left <= 0) {
             this._velocity.x = -this._velocity.x;
         }
-        if(this.bounds.bottom >= Viewport.height || this.bounds.top <= 0) {
+        if(this.bounds.bottom >= Viewport.instance.height || this.bounds.top <= 0) {
             this._velocity.y = -this._velocity.y;
         }
     }
