@@ -1,7 +1,7 @@
 import { Types } from 'engine/internal';
 
 /**
- * Adds a dirty flag to the decorated class. 
+ * Adds a dirty flag to a base class.
  * 
  * A dirty flag in this case is used to determine if 
  * the decorated class needs to be redrawn in the

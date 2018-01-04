@@ -1,11 +1,12 @@
 import { Vector } from 'engine/library/maths';
-import { BoundingBox, Transform, Sprite, SpriteConfig, Component } from 'engine/library/objects';
+import { BoundingBox, Transform, Sprite, SpriteConfig, Component, Colliderable } from 'engine/library/objects';
 import { Camera } from 'engine/library/screen';
+import { Collider } from 'engine/library/collisions';
 
 /**
  * Represents an object in the scene
  */
-export default class GameObject {
+export default class GameObject implements Colliderable {
 
     private _id: string;
     private _element: HTMLDivElement;
@@ -190,6 +191,10 @@ export default class GameObject {
             return;
         }
         this._components.forEach(c => c.onUpdate(timestep));
+    }
+
+    public onCollision(collidingObjs: Collider[]) : void {
+
     }
 
     /**

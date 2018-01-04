@@ -1,5 +1,6 @@
 import { Vector } from 'engine/library/maths';
 import { GameObject, makeGameObject, GameObjectConfig } from 'engine/library/objects';
+import { Collider } from 'engine/library/collisions';
 
 /**
  * Handles instantiation, destruction and management of all GameObjects
@@ -19,12 +20,21 @@ export default class SceneGraph {
     private _hierarchy: Array<GameObject> = [];
 
     /**
+     * All colliders (attached to GameObjects) in the scene
+     */
+    private _colliders: Array<Collider> = [];
+
+    /**
      * A unique string id to GameObject mapping
      */
     private _gameObjects: Map<string, GameObject> = new Map();
 
     get hierarchy() : Array<GameObject> {
         return this._hierarchy;
+    }
+
+    get colliders() : Array<Collider> {
+        return this._colliders;
     }
 
     /**
@@ -34,6 +44,15 @@ export default class SceneGraph {
      */
     get(id: string) : GameObject {
         return this._gameObjects.get(id);
+    }
+
+    /**
+     * Adds a collider for collision tracking
+     * 
+     * @param collider 
+     */
+    addCollider(collider: Collider) : void {
+        this._colliders.push(collider);
     }
 
     /**
