@@ -1,12 +1,5 @@
-import { SceneGraph, Transform } from "engine/library/objects";
-import { Collider } from "engine/library/collisions";
-import GameObject from "engine/library/objects/GameObject";
-
-export interface Colliderable extends GameObject {
-    onCollision(collidingObjs: Collider[]): void;
-    onUpdate(timestep: number): void;
-    getTransform(): Transform;
-}
+import { Colliderable } from "engine/library/objects/modules/collisions/Colliderable";
+import SceneGraph from "engine/library/SceneGraph";
 
 // base class must have an onUpdate lifecycle hook method since
 // we're performing our collision checks after it gets called.

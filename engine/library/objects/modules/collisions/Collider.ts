@@ -18,7 +18,7 @@ export interface Circle {
     position: Vector,
 }
 
-export default abstract class Collider {
+export abstract class Collider {
 
     private _gameObject: GameObject;
 

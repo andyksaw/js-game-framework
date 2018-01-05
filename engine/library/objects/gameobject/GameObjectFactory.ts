@@ -2,7 +2,7 @@ import { Transform, Sprite, SpriteConfig, GameObject, Component } from 'engine/l
 import { Collider } from 'engine/library/collisions';
 import { Vector } from 'engine/library/maths';
 import withCollider from 'engine/library/objects/Colliderable';
-import SceneGraph from 'engine/library/objects/SceneGraph';
+import SceneGraph from 'engine/library/SceneGraph';
 
 export interface GameObjectConfig {
     position?: Vector;

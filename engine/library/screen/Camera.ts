@@ -1,4 +1,5 @@
-import { Transform, SceneGraph } from 'engine/library/objects';
+import { Transform } from 'engine/library/objects';
+import SceneGraph from 'engine/library/SceneGraph';
 
 export default class Camera {
     private static _instance: Camera;

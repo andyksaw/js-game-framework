@@ -1,4 +1,5 @@
-import { SceneGraph } from 'engine/library/objects';
+import SceneGraph from "engine/library/SceneGraph";
+
 
 /**
  * Desired amount of time in milliseconds between frames

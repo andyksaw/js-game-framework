@@ -1,8 +1,9 @@
-import { GameObject, Component, SceneGraph, BoundingBox } from 'engine/library/objects';
+import { GameObject, Component, BoundingBox } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Keyboard } from 'engine/library/input';
 import { Viewport, Camera } from 'engine/library/screen';
 import BoxCollider from 'engine/library/collisions/colliders/BoxCollider';
+import SceneGraph from 'engine/library/SceneGraph';
 
 export class SceneManager extends Component {
     private _rockList: Array<GameObject> = [];

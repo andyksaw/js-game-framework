@@ -2,10 +2,11 @@ import { Game } from 'engine/game';
 import { PlaneMovement } from './components/PlaneMovement';
 import { SceneManager } from './components/SceneManager';
 
-import { SceneGraph, Sprite, BoundingBox } from 'engine/library/objects';
+import { Sprite, BoundingBox } from 'engine/library/objects';
 import { Vector } from 'engine/library/maths';
 import { Viewport, Canvas, Camera } from 'engine/library/screen';
 import { BoxCollider } from 'engine/library/collisions/colliders';
+import SceneGraph from 'engine/library/SceneGraph';
 
 class FlappyGame extends Game {
     onStart() {

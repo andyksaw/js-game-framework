@@ -1,7 +1,7 @@
 import { Vector } from 'engine/library/maths';
 import { BoundingBox, Transform, Sprite, SpriteConfig, Component, Colliderable } from 'engine/library/objects';
 import { Camera } from 'engine/library/screen';
-import { Collider } from 'engine/library/collisions';
+import { render } from 'engine/library/objects/gameobject/GameObjectRenderer';
 
 /**
  * Represents an object in the scene
@@ -204,41 +204,16 @@ export default class GameObject implements Colliderable {
         if(!this._isVisible || this._isDisabled || this._isDestroying) {
             return;
         }
-        
-        let screenSpacePos = null;
-        let isTransformDirty = false;
-        
-        // only redraw when the Transform has actually moved
-        if(this._transform.isDirty()) {
-            // the Transform stores our world-space coordinates,
-            // but we need to render the object in screen-space
-            screenSpacePos = this._getScreenPosition();
 
-            this._element.style.left = screenSpacePos.x.toString();
-            this._element.style.top  = screenSpacePos.y.toString();
-
-            this._transform.clean();
-
-            isTransformDirty = true;
-        }
+        const didGameObjectRender = render(this._element, this._transform, Camera.instance);
 
         // only redraw the sprite if the Sprite or Transform has moved
-        if(this._sprite && (isTransformDirty || this._sprite.isDirty())) {
-            screenSpacePos = screenSpacePos || this._getScreenPosition();
+        if(this._sprite && (didGameObjectRender || this._sprite.isDirty())) {
+            // screenSpacePos = screenSpacePos || this._getScreenPosition();
 
-            this._sprite.render(screenSpacePos);
-            this._sprite.clean();
+            // this._sprite.render(screenSpacePos);
+            // this._sprite.clean();
         }
 
-    }
-
-    private _getScreenPosition() : Vector {
-        const position = this._transform.getPosition();
-        const cameraPos = Camera.instance.transform.getPosition();
-        
-        return new Vector(
-            position.x - cameraPos.x,
-            position.y - cameraPos.y
-        );
     }
 }
