@@ -1,4 +1,5 @@
 import { Game } from 'engine/game';
+import { GameObjectFactory } from 'engine/modules';
 // import { PlaneMovement } from './components/PlaneMovement';
 // import { SceneManager } from './components/SceneManager';
 
@@ -8,8 +9,13 @@ import { Game } from 'engine/game';
 // import { BoxCollider } from 'engine/library/collisions/colliders';
 // import SceneGraph from 'engine/library/SceneGraph';
 
-class FlappyGame extends Game {
-    onStart() {
+new class FlappyGame extends Game {
+    onStart() : void {
+
+        GameObjectFactory.instantiate('test', {
+            
+        });
+
         // const scene = SceneGraph.instance;
         // const sceneManager = scene.instantiate('sceneManager', {
         //     components: [
@@ -44,6 +50,3 @@ class FlappyGame extends Game {
         // });
     }
 }
-
-const game = new FlappyGame();
-game.initialise();

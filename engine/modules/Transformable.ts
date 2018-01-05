@@ -11,7 +11,7 @@ type Constructor<T extends IDestroyable = IDestroyable> = new(...args: any[]) =>
  * 
  * @param Base 
  */
-export default function withTransform<T extends Constructor>(Base: T) : Constructor & T {
+export default function withTransform<T extends Constructor>(Base: T) {
     return class Transformable extends Base {
         private _transform: Transform;
 

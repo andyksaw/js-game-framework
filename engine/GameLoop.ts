@@ -22,6 +22,11 @@ export default class GameLoop {
     private _isBooted: boolean;
 
 
+    constructor() {
+        this._performLoop = this._performLoop.bind(this);
+    }
+
+
     get timestep() : number {
         return this._timestep;
     }
@@ -53,7 +58,7 @@ export default class GameLoop {
     /**
      *  Delegates work to every GameObject
      */
-    private _onUpdate(_timestep: number) {
+    private _onUpdate(timestep: number) {
         const graph = SceneGraph.instance.getObjects();
         const corpseObjects = [];
 
@@ -64,17 +69,17 @@ export default class GameLoop {
             const obj = graph[i].object;
 
             // any objects marked for deletion should not be executed
-            if(obj.isDestroying()) {
-                corpseObjects.push(obj);
-                continue;
-            }
-            obj.onUpdate(_timestep);
+            // if(obj.isDestroying()) {
+            //     corpseObjects.push(obj);
+            //     continue;
+            // }
+            obj.onUpdate(timestep);
         }
 
         // cleanup any objects marked for deletion
-        if(corpseObjects.length > 0) {
-            SceneGraph.instance.removeBatch(corpseObjects);
-        }
+        // if(corpseObjects.length > 0) {
+        //     SceneGraph.instance.removeBatch(corpseObjects);
+        // }
     }
 
     /**
@@ -82,7 +87,7 @@ export default class GameLoop {
      */
     private _onRender() {
         SceneGraph.instance.getObjects().forEach(
-            obj => obj.render()
+            obj => obj.object.onRender()
         );
     }
 

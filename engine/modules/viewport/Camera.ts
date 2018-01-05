@@ -1,15 +1,15 @@
-import { CameraObjectType, default as CameraObject } from 'engine/modules/viewport/CameraObject';
+import { CameraObjectType, CameraObject } from 'engine/modules/viewport';
 
 /**
  * The current camera being displayed in the viewport
  */
-let _currentCamera: CameraObjectType = new CameraObject();
+let _currentCamera: CameraObjectType;
 
 /**
  * Returns the main camera
  */
-export function getMain() : void {
-    return this._currentCamera;
+export function getMain() : CameraObjectType {
+    return this._currentCamera || (this._currentCamera = new CameraObject());
 }
 
 /**
@@ -19,8 +19,4 @@ export function getMain() : void {
  */
 export function switchCamera(camera: CameraObjectType) : void {
     _currentCamera = camera;
-}
-
-export function create() {
-    
 }
