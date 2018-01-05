@@ -1,8 +1,7 @@
-'use strict';
 
-import { bootGameLoop } from 'engine/library/GameLoop';
-import { Camera } from 'engine/library/screen';
-import { Vector } from 'engine/library/maths';
+import { startGameLoop } from 'engine/library/GameLoop';
+// import { Camera } from 'engine/library/screen';
+// import { Vector } from 'engine/library/maths';
 
 /**
  * Base container for a game. A game should extend this
@@ -14,8 +13,8 @@ export class Game {
      * Starts the engine game loop and the game's logic
      */
     initialise() {
-        Camera.instance.transform.setPosition(new Vector(0, 0));
-        bootGameLoop(this.onStart);
+        // Camera.instance.transform.setPosition(new Vector(0, 0));
+        startGameLoop(this.onStart);
     }
 
     /**
