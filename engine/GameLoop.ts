@@ -1,94 +1,102 @@
 import SceneGraph from "engine/SceneGraph";
 
+export default class GameLoop {
+    /**
+     * Desired amount of time in milliseconds between frames
+     */
+    private _msPerFrame: number = 16;
 
-/**
- * Desired amount of time in milliseconds between frames
- *
- * @constant {number}
- */
-const MS_PER_FRAME: number = 16;
+    /**
+     * Game speed (1 = normal speed | 0 = not moving)
+     */
+    private _timestep: number = 1;
 
-/**
- *  Game speed (1 = normal speed | 0 = not moving)
- * 
- *  @constant {number}
- */
-const TIME_STEP: number = 1;
+    /**
+     * Timestamp of the last rendered frame
+     */
+    private _lastTick: number;
 
-/**
- *  Timestamp of the last rendered frame
- * 
- * @type {number}
- */
-let lastTick: number;
-
-
-/**
- * The main game loop.
- * 
- * Calculates frame stats and passes it to the update
- * and render loop
- */
-function gameLoop() : void {
-    // calculate how much time has actually passed since
-    // the last frame and pass it to the update loop
-    const currentTick = Date.now();
-    const elapsed = currentTick - lastTick;
-    const step = (MS_PER_FRAME / elapsed) * TIME_STEP;
-    
-    onUpdate(step);
-    onRender();
-
-    lastTick = currentTick;
-    requestAnimationFrame(gameLoop);
-}
+    /**
+     * Is the loop running already
+     */
+    private _isBooted: boolean;
 
 
-/**
- *  Delegates work to every GameObject
- */
-function onUpdate(timestep: number) {
-    const graph = SceneGraph.instance.getObjects();
-    const corpseObjects = [];
+    get timestep() : number {
+        return this._timestep;
+    }
+    get isRunning() : boolean {
+        return this._isBooted;
+    }
 
-    // loop over a buffer so that newly instantiated objects
-    // always start execution from the next frame
-    const bufferCount = graph.length;
-    for(let i = 0; i < bufferCount; i++) {
-        const obj = graph[i].object;
+    /**
+     * The main game loop.
+     * 
+     * Calculates frame stats and passes it to the update
+     * and render loop
+     */
+    private _performLoop() : void {
+        // calculate how much time has actually passed since
+        // the last frame and pass it to the update loop
+        const currentTick = Date.now();
+        const elapsed = currentTick - this._lastTick;
+        const step = (this._msPerFrame / elapsed) * this._timestep;
+        
+        this._onUpdate(step);
+        this._onRender();
 
-        // any objects marked for deletion should not be executed
-        if(obj.isDestroying()) {
-            corpseObjects.push(obj);
-            continue;
+        this._lastTick = currentTick;
+        requestAnimationFrame(this._performLoop);
+    }
+
+
+    /**
+     *  Delegates work to every GameObject
+     */
+    private _onUpdate(_timestep: number) {
+        const graph = SceneGraph.instance.getObjects();
+        const corpseObjects = [];
+
+        // loop over a buffer so that newly instantiated objects
+        // always start execution from the next frame onwards
+        const bufferCount = graph.length;
+        for(let i = 0; i < bufferCount; i++) {
+            const obj = graph[i].object;
+
+            // any objects marked for deletion should not be executed
+            if(obj.isDestroying()) {
+                corpseObjects.push(obj);
+                continue;
+            }
+            obj.onUpdate(_timestep);
         }
-        obj.onUpdate(timestep);
+
+        // cleanup any objects marked for deletion
+        if(corpseObjects.length > 0) {
+            SceneGraph.instance.removeBatch(corpseObjects);
+        }
     }
 
-    // cleanup any objects marked for deletion
-    if(corpseObjects.length > 0) {
-        SceneGraph.instance.removeBatch(corpseObjects);
+    /**
+     * Renders every visible GameObject to DOM every frame
+     */
+    private _onRender() {
+        SceneGraph.instance.getObjects().forEach(
+            obj => obj.render()
+        );
     }
-}
 
-/**
- * Renders every visible GameObject to DOM every frame
- */
-function onRender() {
-    SceneGraph
-        .instance
-        .getObjects()
-        .forEach(obj => obj.render());
-}
-
-/**
- * Starts the game loop
- */
-let isBooted = false;
-export function startGameLoop(startCallback: Function) {
-    if(!isBooted) {
-        lastTick = Date.now();
-        requestAnimationFrame(gameLoop);
-        startCallback();
-    }
+    /**
+     * Starts the game loop
+     * 
+     * @param startCallback     Logic to perform immediately after
+     *                          the game loop has started
+     */
+    public startGameLoop(startCallback: Function) {
+        if(!this._isBooted) {
+            this._lastTick = Date.now();
+            requestAnimationFrame(this._performLoop);
+            startCallback();
+        }
+    }   
 }

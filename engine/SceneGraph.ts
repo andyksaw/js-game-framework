@@ -1,10 +1,12 @@
+import { GameObjectType } from "engine/modules/gameobject/GameObject";
+
 
 /**
  * Data stored inside the SceneGraph for each object in the scene
  */
 interface TrackedObject {
     id: string;
-    object: GameObject;
+    object: GameObjectType;
 }
 
 /**
@@ -41,7 +43,7 @@ export default class SceneGraph {
      * @param id        Unique identifier
      * @param object    GameObject to insert
      */
-    public add(id: string, object: GameObject) {
+    public add(id: string, object: GameObjectType) {
         if(!id) {
             throw new Error('SceneGraph insert failed: id is required');
         }
@@ -70,7 +72,14 @@ export default class SceneGraph {
         }
         
         this._ids.delete(id);
-        this._objects = this._objects.filter(obj => obj.id !== id);
+
+        for(let i = 0; i < this._objects.length; i++) {
+            const obj = this._objects[i];
+            if(obj.id === id) {
+                this._objects.splice(i, 1);
+                break;
+            }
+        }
     }
     
 }

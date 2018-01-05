@@ -1,17 +1,17 @@
 import Transform from "engine/modules/Transform";
 import IDestroyable from "engine/modules/IDestroyable";
 
-type Constructor<T = IDestroyable> = new(...args: any[]) => T;
+type Constructor<T extends IDestroyable = IDestroyable> = new(...args: any[]) => T;
 
 /**
- * Provides a Transform to the given base class.
+ * Supplies a Transform to the given base class.
  * 
  * Base class must implement IDestroyable so that this mixin
  * can clean up its reference on destruction.
  * 
  * @param Base 
  */
-export default function withTransform<T extends Constructor>(Base: T) {
+export default function withTransform<T extends Constructor>(Base: T) : Constructor & T {
     return class Transformable extends Base {
         private _transform: Transform;
 

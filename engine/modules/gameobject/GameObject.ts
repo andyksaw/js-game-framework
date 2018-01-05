@@ -1,11 +1,12 @@
 import withTransform from "engine/modules/Transformable";
 import IDestroyable from "engine/modules/IDestroyable";
 import Component from "engine/modules/components/Component";
+import { getReturnTypeOf } from "engine/internal/mixins";
 
 /**
  * Represents an object in the scene
  */
-class GameObject implements IDestroyable {
+class GameObjectClass implements IDestroyable {
 
     private _isDestroying: boolean;
     private _isDisabled: boolean;
@@ -57,4 +58,9 @@ class GameObject implements IDestroyable {
 
 }
 
-// export default withTransform(GameObject);
+export const GameObject = withTransform(GameObjectClass);
+
+// export the Type as well so we can use this
+// as a property type (see internal/mixins)
+const returnType = getReturnTypeOf(GameObject);
+export type GameObjectType = typeof returnType;
