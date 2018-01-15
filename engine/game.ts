@@ -1,26 +1,37 @@
-'use strict';
 
-import { bootGameLoop } from 'engine/library/GameLoop';
-import { Camera } from 'engine/library/screen';
-import { Vector } from 'engine/library/maths';
+import { default as GameLoop } from 'engine/GameLoop';
+import { Camera } from 'engine/modules/viewport';
+import { Vector } from 'engine/maths';
 
 /**
  * Base container for a game. A game should extend this
  * and fill it with game specific logic.
  */
-export class Game {
+export abstract class Game {
+
+    /**
+     * The one and only game loop.
+     */
+    private _gameLoop: GameLoop = new GameLoop();
+
+    constructor() {
+        // run the game as soon as a game class is instantiated
+        this.initialise();
+    }
 
     /**
      * Starts the engine game loop and the game's logic
      */
-    initialise() {
-        Camera.instance.transform.setPosition(new Vector(0, 0));
-        bootGameLoop(this.onStart);
+    private initialise() : void {
+        const camera = Camera.getMain();
+        camera.transform.setPosition(Vector.origin);
+
+        this._gameLoop.startGameLoop(this.onStart);
     }
 
     /**
      * Logic to run once after the main game loop is started
      */
-    onStart() {}
+    protected abstract onStart() : void;
 
 }

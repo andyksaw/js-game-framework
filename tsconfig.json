@@ -9,6 +9,7 @@
         "baseUrl": "./",
         "moduleResolution": "node",
         "experimentalDecorators": true,
-        "allowJs": true
+        "allowJs": true,
+        "removeComments": true,
     }
 }
